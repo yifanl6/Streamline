@@ -24,6 +24,17 @@ export interface SpendPolicy {
   allowedPayees: Address[];
 }
 
+export interface PreSignPayment {
+  method: 'GET';
+  resource: string;
+  payTo: Address;
+  amount: bigint;
+  network: string;
+  asset: Address;
+}
+
+export type PreSignGuard = (payment: PreSignPayment) => void | Promise<void>;
+
 export class PolicyError extends Error {}
 
 export interface PaymentRecord {
@@ -84,6 +95,7 @@ export class X402Client {
   constructor(
     private account: PrivateKeyAccount,
     readonly policy: SpendPolicy,
+    private readonly beforeSign?: PreSignGuard,
   ) {}
 
   get remaining(): bigint {
@@ -100,6 +112,7 @@ export class X402Client {
 
     this.reserved += amount; // reserve before signing so concurrent calls can't jointly exceed the budget
     try {
+      await this.beforeSign?.({ method: 'GET', resource: req.resource, payTo: req.payTo, amount, network: req.network, asset: req.asset });
       const payload = await signAuthorization(this.account, req);
       const paid = await fetch(url, { headers: { [PAYMENT_HEADER]: paymentHeader(payload) } });
       const body = await readBody(paid);

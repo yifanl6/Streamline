@@ -155,7 +155,7 @@ The seller signs as fee payer, which makes it a target. `src/x402/verify.ts` rej
 
 The buyer side is defended too. `X402Client` checks the payee allow-list, per-call cap, and remaining budget **before signing**, and it reserves budget so concurrent calls can't overspend.
 
-## Economics (the part people skip)
+## Economics
 
 Settlement costs the seller 10,000 lamports for the two signatures (payer + fee payer), plus a 1-lamport priority fee. At $150/SOL that is about **$0.0015 per payment**:
 

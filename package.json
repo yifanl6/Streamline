@@ -18,22 +18,33 @@
     "monad:orchestrator": "tsx src/monad/orchestrator.ts",
     "monad:attack": "tsx src/monad/attack.ts",
     "monad:web": "tsx src/monad/web.ts",
+    "coordination": "tsx src/coordination/start.ts",
+    "coordination:keygen": "tsx src/coordination/keygen.ts",
+    "coordination:attack": "tsx src/coordination/attack.ts",
+    "near:check": "tsx src/near/check.ts",
+    "privacy:live": "tsx src/privacy/live.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "test:security": "npm run coordination:attack",
+    "check": "npm run typecheck && npm test && npm run test:security",
     "start": "tsx src/monad/start.ts",
     "monad:live": "tsx src/monad/live.ts"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.6.1",
+    "@phala/dcap-qvl": "^0.7.1",
     "@solana/spl-token": "0.4.9",
-    "@solana/web3.js": "1.98.0",
-    "express": "4.21.2",
+    "@solana/web3.js": "^1.99.0",
+    "express": "^4.22.3",
+    "tsx": "^4.23.15",
     "tweetnacl": "1.0.3",
-    "viem": "^2.56.9",
-    "tsx": "^4.23.15"
+    "viem": "^2.56.9"
   },
   "devDependencies": {
     "@types/express": "4.17.21",
     "@types/node": "22.10.2",
+    "@types/supertest": "^7.2.1",
     "solc": "^0.8.37",
+    "supertest": "^7.3.2",
     "typescript": "5.7.2"
   },
   "engines": {

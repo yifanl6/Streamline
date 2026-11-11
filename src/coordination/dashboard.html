@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Streamline Coordination Console</title>
+  <meta name="description" content="Shared DAO budgets, secure agent procurement, private review, and receipt-backed reputation.">
+  <style>
+    :root {
+      --bg:#07110f; --panel:#0d1b18; --panel2:#10231f; --ink:#eff9f3; --muted:#88a399;
+      --line:#24433a; --green:#53e0a1; --cyan:#62d7df; --amber:#f2bc66; --red:#f07f7f;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+    }
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 75% -10%,#153c34 0,transparent 34%),var(--bg);color:var(--ink);font:14px/1.5 var(--sans)}
+    button,input,textarea,select{font:inherit} button{cursor:pointer}.mono{font-family:var(--mono)}
+    header{position:sticky;top:0;z-index:10;background:rgba(7,17,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+    .bar,.shell{max-width:1240px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.04em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font-family:var(--mono)}
+    .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px currentColor}.dot.ok{background:var(--green)}
+    .shell{padding-top:34px;padding-bottom:70px}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:end;margin-bottom:26px}
+    h1{font-size:clamp(32px,5vw,58px);line-height:1.03;letter-spacing:-.045em;margin:0;max-width:800px}.hero p{margin:0;color:var(--muted);font-size:16px;max-width:480px}
+    .tracks{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.track{border:1px solid var(--line);padding:5px 9px;color:var(--muted);font:11px var(--mono);text-transform:uppercase;letter-spacing:.08em}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.panel{background:linear-gradient(145deg,rgba(16,35,31,.94),rgba(10,25,22,.94));border:1px solid var(--line);min-width:0}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
+    .content{padding:16px}.summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr)}.metric{padding:18px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font:24px var(--mono);margin-top:5px}.metric .detail{color:var(--muted);font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis}
+    .board{grid-column:span 8}.setup{grid-column:span 4}.create{grid-column:span 5}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 7}
+    .task{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task-title{font-weight:650}.task-meta{color:var(--muted);font:11px var(--mono);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid currentColor;padding:3px 7px;font:10px var(--mono);text-transform:uppercase;color:var(--cyan)}.badge.open{color:var(--green)}.badge.completed{color:var(--cyan)}
+    label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}.field{margin-bottom:12px}input,textarea,select{width:100%;border:1px solid var(--line);background:#081512;color:var(--ink);padding:10px 11px;outline:none}textarea{min-height:105px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(83,224,161,.12)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#032019;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn:disabled{opacity:.5;cursor:wait}
+    .notice{padding:10px 12px;border-left:3px solid var(--cyan);background:rgba(98,215,223,.07);color:var(--muted);font-size:12px;margin-bottom:14px}.notice.warn{border-color:var(--amber);background:rgba(242,188,102,.07)}
+    .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere;font-family:var(--mono)}
+    .empty{color:var(--muted);padding:16px 0}.error{color:var(--red)}.success{color:var(--green)}.output{margin-top:13px;padding:12px;background:#07120f;border:1px solid var(--line);font:12px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}
+    .token-lock{display:flex;gap:8px}.token-lock input{flex:1}.tiny{font-size:11px;color:var(--muted);margin-top:7px}
+    @media(max-width:900px){.hero{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.board,.setup,.create,.privacy,.reputation,.dao{grid-column:span 12}}
+    @media(max-width:540px){.bar,.shell{padding-left:14px;padding-right:14px}.summary{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line)!important}.row{grid-template-columns:1fr}.bar .status span:last-child{display:none}}
+  </style>
+</head>
+<body>
+<header><div class="bar"><div class="brand"><div class="logo">S/</div><span>STREAMLINE</span></div><div class="status"><i id="statusDot" class="dot"></i><span id="statusText">Connecting to coordination backend</span></div></div></header>
+<main class="shell">
+  <section class="hero">
+    <div><h1>Coordinate value. Prove the work.</h1><div class="tracks"><span class="track">Social money</span><span class="track">Agent economy</span><span class="track">AI security</span><span class="track">Private AI</span></div></div>
+    <p>DAO-controlled budgets fund scoped agent work. Every purchase is policy-checked before signing, every output can be privately reviewed in a TEE, and every reputation point resolves to a completed receipt.</p>
+  </section>
+
+  <div class="grid">
+    <section class="panel summary">
+      <div class="metric"><div class="label">Programs</div><div id="programCount" class="value">—</div><div class="detail">DAO-approved budgets</div></div>
+      <div class="metric"><div class="label">Tasks</div><div id="taskCount" class="value">—</div><div class="detail">Open and claimed work</div></div>
+      <div class="metric"><div class="label">Available</div><div id="remainingTotal" class="value">—</div><div class="detail">base units across programs</div></div>
+      <div class="metric"><div class="label">Treasury</div><div id="daoState" class="value">—</div><div id="daoId" class="detail">No DAO loaded</div></div>
+    </section>
+
+    <section class="panel board">
+      <div class="panel-head"><h2>Community task board</h2><span class="eyebrow">Public</span></div>
+      <div class="content"><div id="tasks" class="empty">No tasks yet.</div></div>
+    </section>
+
+    <section class="panel setup">
+      <div class="panel-head"><h2>Operator session</h2><span class="eyebrow">Local only</span></div>
+      <div class="content">
+        <div class="notice warn">The admin token stays in this browser tab and is sent only to this backend. It is never shown on the public board.</div>
+        <div class="field"><label for="adminToken">Admin token</label><div class="token-lock"><input id="adminToken" type="password" autocomplete="off" placeholder="STREAMLINE_ADMIN_TOKEN"><button id="saveToken" class="btn secondary">Unlock</button></div><div class="tiny"><button id="clearToken" class="btn ghost" type="button">Clear session</button></div></div>
+        <dl class="kv"><dt>Coordinator key</dt><dd id="coordinatorKey">—</dd><dt>Private review</dt><dd id="privateState">—</dd><dt>API</dt><dd id="apiState">—</dd></dl>
+        <div class="actions" style="margin-top:14px"><a class="btn ghost" href="https://trezu.app/create" target="_blank" rel="noopener">Create treasury</a><a class="btn ghost" href="https://cloud.near.ai" target="_blank" rel="noopener">Get AI key</a></div>
+      </div>
+    </section>
+
+    <section class="panel create">
+      <div class="panel-head"><h2>Create program and task</h2><span class="eyebrow">Admin</span></div>
+      <div class="content">
+        <form id="programForm">
+          <div class="row"><div class="field"><label>Program ID</label><input name="id" value="community-research"></div><div class="field"><label>Bounty ID</label><input name="bountyId" type="number" min="0" value="0"></div></div>
+          <div class="row"><div class="field"><label>Network</label><input name="network" value="monad-testnet"></div><div class="field"><label>Asset</label><input name="asset" value="tUSDC"></div></div>
+          <div class="row"><div class="field"><label>Total base units</label><input name="total" inputmode="numeric" value="50000"></div><div class="field"><label>Expires in hours</label><input name="hours" type="number" min="1" value="24"></div></div>
+          <div class="field"><label>Allowed payees, comma separated</label><input name="payees" value="data-agent"></div>
+          <div class="field"><label>Allowed services, comma separated</label><input name="services" value="account-risk"></div>
+          <button class="btn" type="submit">Register program</button>
+        </form>
+        <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+        <form id="taskForm">
+          <div class="field"><label>Program</label><select id="taskProgram" name="programId"><option value="">Create a program first</option></select></div>
+          <div class="field"><label>Task title</label><input name="title" value="Review a wallet risk report"></div>
+          <button class="btn secondary" type="submit">Post task</button>
+        </form>
+        <div id="createOutput"></div>
+      </div>
+    </section>
+
+    <section class="panel privacy">
+      <div class="panel-head"><h2>Private TEE review</h2><span class="eyebrow">NEAR AI Cloud</span></div>
+      <div class="content">
+        <div class="notice">Only hashes, the verdict, and verification checks are returned. Criteria and deliverable text are not persisted by Streamline.</div>
+        <form id="reviewForm">
+          <div class="field"><label>Acceptance criteria</label><textarea name="criteria">Confirm the deliverable answers the task, cites its sources, and contains no personal data.</textarea></div>
+          <div class="field"><label>Deliverable</label><textarea name="deliverable" placeholder="Paste fictional or sensitive work for private review…"></textarea></div>
+          <button class="btn" type="submit">Run verified review</button>
+        </form>
+        <div id="reviewOutput"></div>
+      </div>
+    </section>
+
+    <section class="panel reputation">
+      <div class="panel-head"><h2>Reputation lookup</h2><span class="eyebrow">Receipt-backed</span></div>
+      <div class="content">
+        <form id="reputationForm"><div class="field"><label>Named NEAR account</label><input name="accountId" value="alice.testnet"></div><button class="btn secondary">Look up</button></form>
+        <div id="reputationOutput" class="empty">Enter an account to inspect its traceable history.</div>
+      </div>
+    </section>
+
+    <section class="panel dao">
+      <div class="panel-head"><h2>Sputnik treasury</h2><button id="syncDao" class="btn ghost">Sync DAO</button></div>
+      <div class="content"><div id="daoOutput" class="empty">Configure <span class="mono">SPUTNIK_DAO_ID</span> and sync to inspect policy, bounties, and proposals.</div></div>
+    </section>
+  </div>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const split = (value) => value.split(',').map(v => v.trim()).filter(Boolean);
+  let health = null;
+  let board = { tasks: [], budgets: [] };
+
+  function token(){ return sessionStorage.getItem('streamlineAdminToken') || ''; }
+  async function api(path, options = {}) {
+    const headers = { ...(options.body ? {'content-type':'application/json'} : {}), ...(options.admin ? {authorization:`Bearer ${token()}`} : {}) };
+    const response = await fetch(path, {...options, headers:{...headers,...options.headers}});
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || `Request failed (${response.status})`);
+    return body;
+  }
+  function output(id, value, kind='success') { $(id).innerHTML = `<div class="output ${kind}">${esc(typeof value === 'string' ? value : JSON.stringify(value,null,2))}</div>`; }
+  function withBusy(form, fn) { return async (event) => { event.preventDefault(); const button=form.querySelector('button[type=submit]'); button.disabled=true; try{await fn(new FormData(form));}catch(e){output(form.id==='reviewForm'?'reviewOutput':form.id==='reputationForm'?'reputationOutput':'createOutput',e.message,'error')}finally{button.disabled=false} }; }
+
+  async function refresh() {
+    [health, board] = await Promise.all([api('/health'), api('/v1/board')]);
+    $('statusDot').classList.add('ok'); $('statusText').textContent='Coordination backend online';
+    $('apiState').textContent='connected'; $('coordinatorKey').textContent=health.coordinatorPublicKey;
+    $('privateState').textContent=health.privateReviewConfigured?'configured':'API key not configured';
+    $('daoState').textContent=health.daoId?'ready':'setup'; $('daoId').textContent=health.daoId || 'SPUTNIK_DAO_ID missing';
+    $('programCount').textContent=board.budgets.length; $('taskCount').textContent=board.tasks.length;
+    $('remainingTotal').textContent=board.budgets.reduce((sum,b)=>sum+BigInt(b.remaining),0n).toString();
+    $('taskProgram').innerHTML=board.budgets.length?board.budgets.map(b=>`<option value="${esc(b.programId)}">${esc(b.programId)} · ${esc(b.remaining)} left</option>`).join(''):'<option value="">Create a program first</option>';
+    renderTasks();
+  }
+  function renderTasks(){
+    if(!board.tasks.length){$('tasks').innerHTML='<div class="empty">No tasks yet. Register a program and post the first task.</div>';return}
+    $('tasks').innerHTML=board.tasks.map(t=>`<article class="task"><div><div class="task-title">${esc(t.title)}</div><div class="task-meta">${esc(t.id)} · ${esc(t.programId)}${t.contributor?` · ${esc(t.contributor)}`:''}</div></div><div><span class="badge ${esc(t.status)}">${esc(t.status)}</span>${t.status==='open'?`<button class="btn ghost claim" data-id="${esc(t.id)}" style="margin-left:8px">Claim</button>`:''}</div></article>`).join('');
+    document.querySelectorAll('.claim').forEach(button=>button.onclick=async()=>{const accountId=prompt('Named NEAR account to claim this task:','alice.testnet');if(!accountId)return;try{await api(`/v1/tasks/${button.dataset.id}/claim`,{method:'POST',admin:true,body:JSON.stringify({accountId})});await refresh()}catch(e){alert(e.message)}});
+  }
+
+  $('saveToken').onclick=()=>{sessionStorage.setItem('streamlineAdminToken',$('adminToken').value);$('adminToken').value='';$('statusText').textContent='Operator session unlocked'};
+  $('clearToken').onclick=()=>{sessionStorage.removeItem('streamlineAdminToken');$('statusText').textContent='Operator session cleared'};
+  $('programForm').onsubmit=withBusy($('programForm'),async data=>{if(!health.daoId)throw new Error('Set SPUTNIK_DAO_ID before registering a DAO-backed program');const body={version:1,id:data.get('id'),daoId:health.daoId,bountyId:Number(data.get('bountyId')),asset:data.get('asset'),network:data.get('network'),total:data.get('total'),expiresAt:Date.now()+Number(data.get('hours'))*3600000,allowedServices:split(data.get('services')),allowedPayees:split(data.get('payees'))};await api('/v1/programs',{method:'POST',admin:true,body:JSON.stringify(body)});output('createOutput','Program registered.');await refresh()});
+  $('taskForm').onsubmit=withBusy($('taskForm'),async data=>{await api('/v1/tasks',{method:'POST',admin:true,body:JSON.stringify({programId:data.get('programId'),title:data.get('title')})});output('createOutput','Task posted.');await refresh()});
+  $('reviewForm').onsubmit=withBusy($('reviewForm'),async data=>{const result=await api('/v1/private-review',{method:'POST',admin:true,body:JSON.stringify({criteria:data.get('criteria'),deliverable:data.get('deliverable')})});output('reviewOutput',{decision:result.decision,reasons:result.reasons,model:result.model,requestHash:result.requestHash,responseHash:result.responseHash,attestationVerified:result.attestation.verified,responseVerified:result.responseVerification.verified,checks:[...result.attestation.checks,...result.responseVerification.checks]})});
+  $('reputationForm').onsubmit=withBusy($('reputationForm'),async data=>{const result=await api(`/v1/reputation/${encodeURIComponent(data.get('accountId'))}`);output('reputationOutput',result)});
+  $('syncDao').onclick=async()=>{try{const result=await api('/v1/dao');output('daoOutput',{daoId:result.daoId,roles:result.policy.roles?.length??0,proposalBond:result.policy.proposal_bond,bounties:result.bounties.length,proposals:result.proposals.length})}catch(e){output('daoOutput',e.message,'error')}};
+  refresh().catch(e=>{$('statusText').textContent=e.message;$('apiState').textContent='offline';$('tasks').innerHTML=`<div class="error">${esc(e.message)}</div>`});
+</script>
+</body>
+</html>
