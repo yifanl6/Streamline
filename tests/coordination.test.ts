@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { loadApiSigningKey } from '../src/coordination/api';
 import { TaskBudget } from '../src/coordination/budget';
 import { CapabilityGuard } from '../src/coordination/capability';
 import { canonicalJson, generateSigningKeys, publicKeyString, sha256, signEnvelope, verifyEnvelope } from '../src/coordination/canonical';
@@ -52,6 +53,20 @@ test('canonical JSON, signatures, and hashes are deterministic and tamper eviden
   assert.equal(verifyEnvelope(signed, new Set([signed.publicKey])), true);
   signed.payload.amount = '5001';
   assert.equal(verifyEnvelope(signed), false);
+});
+
+test('a hosted signing seed produces a stable Ed25519 coordinator identity', () => {
+  const previousSeed = process.env.STREAMLINE_SIGNING_SEED;
+  try {
+    process.env.STREAMLINE_SIGNING_SEED = Buffer.alloc(32, 7).toString('base64');
+    const first = loadApiSigningKey();
+    const second = loadApiSigningKey();
+    assert.ok(first && second);
+    assert.equal(publicKeyString(first), publicKeyString(second));
+  } finally {
+    if (previousSeed === undefined) delete process.env.STREAMLINE_SIGNING_SEED;
+    else process.env.STREAMLINE_SIGNING_SEED = previousSeed;
+  }
 });
 
 test('shared budget reserves atomically, settles once, and releases failures', () => {

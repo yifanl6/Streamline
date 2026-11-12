@@ -1,24 +1,28 @@
-# Render Blueprint: the whole Monad stack (data agent, analyst agent, dashboard) as one free web service.
+# Free Render Blueprint for the Streamline NEAR coordination dashboard.
 # Deploy: https://render.com/deploy?repo=https://github.com/yifanl6/solana-a2a-pay
 services:
   - type: web
-    name: streamline
+    name: streamline-coordination
     runtime: node
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
-    healthCheckPath: /healthz
+    buildCommand: npm ci
+    startCommand: npm run coordination
+    healthCheckPath: /health
+    autoDeploy: true
     envVars:
+      - key: NODE_ENV
+        value: production
       - key: NODE_VERSION
         value: "22"
-      - key: AGENT
-        value: all
-      - key: MONAD_NETWORK
-        value: monad-testnet
-      # Wallet keys: paste from .wallets/monad-testnet/<role>.key when Render asks.
-      - key: ORCHESTRATOR_PRIVATE_KEY
-        sync: false
-      - key: ANALYST_PRIVATE_KEY
-        sync: false
-      - key: DATA_PRIVATE_KEY
+      - key: SPUTNIK_DAO_ID
+        value: streamline-community.sputnik-dao.near
+      - key: NEAR_RPC_URL
+        value: https://rpc.mainnet.near.org
+      - key: NEAR_AI_MODEL
+        value: z-ai/glm-5.3-flash
+      - key: STREAMLINE_ADMIN_TOKEN
+        generateValue: true
+      - key: STREAMLINE_SIGNING_SEED
+        generateValue: true
+      - key: NEARAI_CLOUD_API_KEY
         sync: false

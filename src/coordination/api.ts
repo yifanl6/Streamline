@@ -270,8 +270,18 @@ function requireAdmin(expected: string) {
 }
 
 export function loadApiSigningKey(): KeyObject | undefined {
+  const seed = process.env.STREAMLINE_SIGNING_SEED;
+  if (seed) {
+    const seedBytes = Buffer.from(seed, 'base64');
+    if (seedBytes.length !== 32) throw new Error('STREAMLINE_SIGNING_SEED must decode to exactly 32 bytes');
+    const pkcs8Prefix = Buffer.from('302e020100300506032b657004220420', 'hex');
+    return crypto.createPrivateKey({ key: Buffer.concat([pkcs8Prefix, seedBytes]), type: 'pkcs8', format: 'der' });
+  }
   const encoded = process.env.STREAMLINE_SIGNING_KEY;
   if (!encoded || encoded.startsWith('replace-')) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('STREAMLINE_SIGNING_SEED or STREAMLINE_SIGNING_KEY is required in production');
+    }
     if (encoded) console.warn('[coordination] STREAMLINE_SIGNING_KEY is a placeholder; using an ephemeral demo key');
     return undefined;
   }
