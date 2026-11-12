@@ -16,7 +16,7 @@ Open `.env` locally and set:
 SPUTNIK_DAO_ID=your-dao.sputnik-dao.near
 NEAR_RPC_URL=https://rpc.mainnet.near.org
 NEARAI_CLOUD_API_KEY=replace-with-a-new-key
-NEAR_AI_MODEL=zai-org/GLM-5.1-FP8
+NEAR_AI_MODEL=z-ai/glm-5.3-flash
 ```
 
 The `.env` file is ignored by Git. Never commit it, paste it into an issue, or show it during the demo.

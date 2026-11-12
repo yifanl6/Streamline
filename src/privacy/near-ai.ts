@@ -52,7 +52,7 @@ export class NearAiPrivateReviewer {
   constructor(
     private readonly apiKey: string,
     private readonly verifier: NearAiEvidenceVerifier,
-    private readonly model = process.env.NEAR_AI_MODEL ?? 'zai-org/GLM-5.1-FP8',
+    private readonly model = process.env.NEAR_AI_MODEL ?? 'z-ai/glm-5.3-flash',
     private readonly baseUrl = 'https://cloud-api.near.ai/v1',
     private readonly fetcher: typeof fetch = fetch,
   ) {

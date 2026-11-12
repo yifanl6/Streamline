@@ -14,16 +14,17 @@
     *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 75% -10%,#153c34 0,transparent 34%),var(--bg);color:var(--ink);font:14px/1.5 var(--sans)}
     button,input,textarea,select{font:inherit} button{cursor:pointer}.mono{font-family:var(--mono)}
     header{position:sticky;top:0;z-index:10;background:rgba(7,17,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-    .bar,.shell{max-width:1240px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .bar,.shell{max-width:1440px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.04em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font-family:var(--mono)}
     .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px currentColor}.dot.ok{background:var(--green)}
-    .shell{padding-top:34px;padding-bottom:70px}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:end;margin-bottom:26px}
+    .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:end;margin-bottom:26px}
+    .sidebar{position:sticky;top:96px}.side-kicker{font:10px var(--mono);color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px 12px}.side-nav{display:grid;gap:7px}.nav-tab{width:100%;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:8px;text-align:left;border:1px solid transparent;background:transparent;color:var(--muted);padding:11px 12px}.nav-tab:hover{border-color:var(--line);color:var(--ink)}.nav-tab[aria-selected="true"]{background:var(--panel2);border-color:var(--green);color:var(--ink)}.nav-index{font:10px var(--mono);color:var(--green)}.nav-copy strong{display:block;font-size:13px}.nav-copy small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.side-note{border-top:1px solid var(--line);margin-top:18px;padding:16px 12px 0;color:var(--muted);font-size:11px}.side-note strong{display:block;color:var(--ink);margin-bottom:5px}
     h1{font-size:clamp(32px,5vw,58px);line-height:1.03;letter-spacing:-.045em;margin:0;max-width:800px}.hero p{margin:0;color:var(--muted);font-size:16px;max-width:480px}
     .tracks{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.track{border:1px solid var(--line);padding:5px 9px;color:var(--muted);font:11px var(--mono);text-transform:uppercase;letter-spacing:.08em}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.panel{background:linear-gradient(145deg,rgba(16,35,31,.94),rgba(10,25,22,.94));border:1px solid var(--line);min-width:0}
     .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
     .content{padding:16px}.summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr)}.metric{padding:18px;border-right:1px solid var(--line)}.metric:last-child{border:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font:24px var(--mono);margin-top:5px}.metric .detail{color:var(--muted);font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis}
-    .board{grid-column:span 8}.setup{grid-column:span 4}.create{grid-column:span 5}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 7}
+    .board{grid-column:span 7}.setup{grid-column:span 4}.create{grid-column:span 8}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 5}.guide{grid-column:span 12}.tab-hidden{display:none!important}
     .task{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task-title{font-weight:650}.task-meta{color:var(--muted);font:11px var(--mono);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid currentColor;padding:3px 7px;font:10px var(--mono);text-transform:uppercase;color:var(--cyan)}.badge.open{color:var(--green)}.badge.completed{color:var(--cyan)}
     label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}.field{margin-bottom:12px}input,textarea,select{width:100%;border:1px solid var(--line);background:#081512;color:var(--ink);padding:10px 11px;outline:none}textarea{min-height:105px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(83,224,161,.12)}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#032019;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:var(--line)}.btn:disabled{opacity:.5;cursor:wait}
@@ -31,32 +32,44 @@
     .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere;font-family:var(--mono)}
     .empty{color:var(--muted);padding:16px 0}.error{color:var(--red)}.success{color:var(--green)}.output{margin-top:13px;padding:12px;background:#07120f;border:1px solid var(--line);font:12px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}
     .token-lock{display:flex;gap:8px}.token-lock input{flex:1}.tiny{font-size:11px;color:var(--muted);margin-top:7px}
-    @media(max-width:900px){.hero{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.board,.setup,.create,.privacy,.reputation,.dao{grid-column:span 12}}
-    @media(max-width:540px){.bar,.shell{padding-left:14px;padding-right:14px}.summary{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line)!important}.row{grid-template-columns:1fr}.bar .status span:last-child{display:none}}
+    .guide-intro{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:start}.guide-intro h2{font-size:30px;line-height:1.1;margin:0 0 10px;letter-spacing:-.03em}.guide-intro p{color:var(--muted);margin:0}.role-grid,.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}.role-card,.step{border:1px solid var(--line);background:#091713;padding:16px}.role-card h3,.step h3{font-size:13px;margin:6px 0}.role-card p,.step p{font-size:12px;color:var(--muted);margin:0}.role-label{font:10px var(--mono);color:var(--cyan);text-transform:uppercase;letter-spacing:.08em}.step-number{display:grid;place-items:center;width:25px;height:25px;border:1px solid var(--green);color:var(--green);font:11px var(--mono)}.flow-list{margin:12px 0 0;padding-left:18px;color:var(--muted)}.flow-list li{margin:7px 0}.guide-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+    @media(max-width:900px){.shell{display:block;padding-top:0}.sidebar{position:sticky;top:68px;z-index:8;background:rgba(7,17,15,.96);margin:0 -22px 24px;padding:10px 22px;border-bottom:1px solid var(--line);overflow-x:auto}.side-kicker,.side-note,.nav-copy small{display:none}.side-nav{display:flex;min-width:max-content}.nav-tab{width:auto;grid-template-columns:20px auto;padding:9px 12px}.hero{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.board,.setup,.create,.privacy,.reputation,.dao{grid-column:span 12}.guide-intro{grid-template-columns:1fr}.role-grid,.steps{grid-template-columns:1fr 1fr}}
+    @media(max-width:540px){.bar,.shell{padding-left:14px;padding-right:14px}.sidebar{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}.summary{grid-template-columns:1fr}.metric{border-right:0;border-bottom:1px solid var(--line)!important}.row,.role-grid,.steps{grid-template-columns:1fr}.bar .status span:last-child{display:none}.hero p{font-size:14px}}
   </style>
 </head>
 <body>
 <header><div class="bar"><div class="brand"><div class="logo">S/</div><span>STREAMLINE</span></div><div class="status"><i id="statusDot" class="dot"></i><span id="statusText">Connecting to coordination backend</span></div></div></header>
 <main class="shell">
+  <aside class="sidebar" aria-label="Streamline sections">
+    <p class="side-kicker">Workspace</p>
+    <nav class="side-nav" role="tablist" aria-orientation="vertical">
+      <button class="nav-tab" type="button" role="tab" aria-selected="true" aria-controls="view-overview" data-tab="overview"><span class="nav-index">01</span><span class="nav-copy"><strong>Overview</strong><small>Tasks, budgets &amp; DAO</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-build" data-tab="build"><span class="nav-index">02</span><span class="nav-copy"><strong>Build &amp; fund</strong><small>Create coordinated work</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-trust" data-tab="trust"><span class="nav-index">03</span><span class="nav-copy"><strong>Privacy &amp; trust</strong><small>TEE review &amp; reputation</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-guide" data-tab="guide"><span class="nav-index">04</span><span class="nav-copy"><strong>How to use</strong><small>Roles and demo walkthrough</small></span></button>
+    </nav>
+    <div class="side-note"><strong>Local demo</strong>Public reads need no token. Creating programs, claiming tasks, and private review use the operator session.</div>
+  </aside>
+  <div class="workspace">
   <section class="hero">
     <div><h1>Coordinate value. Prove the work.</h1><div class="tracks"><span class="track">Social money</span><span class="track">Agent economy</span><span class="track">AI security</span><span class="track">Private AI</span></div></div>
     <p>DAO-controlled budgets fund scoped agent work. Every purchase is policy-checked before signing, every output can be privately reviewed in a TEE, and every reputation point resolves to a completed receipt.</p>
   </section>
 
   <div class="grid">
-    <section class="panel summary">
+    <section id="view-overview" class="panel summary" data-view="overview" role="tabpanel">
       <div class="metric"><div class="label">Programs</div><div id="programCount" class="value">—</div><div class="detail">DAO-approved budgets</div></div>
       <div class="metric"><div class="label">Tasks</div><div id="taskCount" class="value">—</div><div class="detail">Open and claimed work</div></div>
       <div class="metric"><div class="label">Available</div><div id="remainingTotal" class="value">—</div><div class="detail">base units across programs</div></div>
       <div class="metric"><div class="label">Treasury</div><div id="daoState" class="value">—</div><div id="daoId" class="detail">No DAO loaded</div></div>
     </section>
 
-    <section class="panel board">
+    <section class="panel board" data-view="overview">
       <div class="panel-head"><h2>Community task board</h2><span class="eyebrow">Public</span></div>
       <div class="content"><div id="tasks" class="empty">No tasks yet.</div></div>
     </section>
 
-    <section class="panel setup">
+    <section id="view-build" class="panel setup tab-hidden" data-view="build" role="tabpanel">
       <div class="panel-head"><h2>Operator session</h2><span class="eyebrow">Local only</span></div>
       <div class="content">
         <div class="notice warn">The admin token stays in this browser tab and is sent only to this backend. It is never shown on the public board.</div>
@@ -66,7 +79,7 @@
       </div>
     </section>
 
-    <section class="panel create">
+    <section class="panel create tab-hidden" data-view="build">
       <div class="panel-head"><h2>Create program and task</h2><span class="eyebrow">Admin</span></div>
       <div class="content">
         <form id="programForm">
@@ -87,7 +100,7 @@
       </div>
     </section>
 
-    <section class="panel privacy">
+    <section id="view-trust" class="panel privacy tab-hidden" data-view="trust" role="tabpanel">
       <div class="panel-head"><h2>Private TEE review</h2><span class="eyebrow">NEAR AI Cloud</span></div>
       <div class="content">
         <div class="notice">Only hashes, the verdict, and verification checks are returned. Criteria and deliverable text are not persisted by Streamline.</div>
@@ -100,7 +113,7 @@
       </div>
     </section>
 
-    <section class="panel reputation">
+    <section class="panel reputation tab-hidden" data-view="trust">
       <div class="panel-head"><h2>Reputation lookup</h2><span class="eyebrow">Receipt-backed</span></div>
       <div class="content">
         <form id="reputationForm"><div class="field"><label>Named NEAR account</label><input name="accountId" value="alice.testnet"></div><button class="btn secondary">Look up</button></form>
@@ -108,10 +121,38 @@
       </div>
     </section>
 
-    <section class="panel dao">
+    <section class="panel dao" data-view="overview">
       <div class="panel-head"><h2>Sputnik treasury</h2><button id="syncDao" class="btn ghost">Sync DAO</button></div>
       <div class="content"><div id="daoOutput" class="empty">Configure <span class="mono">SPUTNIK_DAO_ID</span> and sync to inspect policy, bounties, and proposals.</div></div>
     </section>
+
+    <section id="view-guide" class="panel guide tab-hidden" data-view="guide" role="tabpanel">
+      <div class="panel-head"><h2>How to use Streamline</h2><span class="eyebrow">Start here</span></div>
+      <div class="content">
+        <div class="guide-intro">
+          <div><h2>One shared budget, from proposal to proof.</h2><p>Streamline helps a community turn DAO-approved funds into scoped tasks that people or agents can complete. Spending is constrained before signing, private work can be reviewed inside a TEE, and reputation comes from verifiable receipts instead of self-reported scores.</p></div>
+          <div class="notice">This hackathon build keeps administration local. The Sputnik DAO remains the treasury and approval layer; Streamline coordinates what the community does with it.</div>
+        </div>
+
+        <div class="role-grid">
+          <article class="role-card"><span class="role-label">Community member</span><h3>See where funds go</h3><p>Open Overview to inspect public tasks, remaining program budgets, DAO policy, bounties, and proposals. No admin token is needed for read-only access.</p></article>
+          <article class="role-card"><span class="role-label">Contributor</span><h3>Claim funded work</h3><p>Choose an open task and identify yourself with a named NEAR account. In this local demo, the operator session authorizes the claim.</p></article>
+          <article class="role-card"><span class="role-label">DAO operator</span><h3>Coordinate safely</h3><p>Unlock Build &amp; fund with the local admin token, register a bounded program, post tasks, and request private acceptance review before settlement.</p></article>
+        </div>
+
+        <div class="steps">
+          <article class="step"><span class="step-number">1</span><h3>Approve funds in Sputnik</h3><p>Create or approve the community bounty through the DAO. Streamline references its public DAO and bounty IDs.</p></article>
+          <article class="step"><span class="step-number">2</span><h3>Register guardrails</h3><p>Set the total, expiry, payment network, asset, approved services, and approved recipients in Build &amp; fund.</p></article>
+          <article class="step"><span class="step-number">3</span><h3>Post and claim work</h3><p>Create a clear task. A contributor or agent claims it with a named account so activity remains attributable.</p></article>
+          <article class="step"><span class="step-number">4</span><h3>Review privately</h3><p>Use Privacy &amp; trust to compare a deliverable with its acceptance criteria in NEAR AI Cloud’s verified TEE.</p></article>
+          <article class="step"><span class="step-number">5</span><h3>Settle within policy</h3><p>Capabilities limit routes, payees, call count, expiry, and total spend before any payment is authorized.</p></article>
+          <article class="step"><span class="step-number">6</span><h3>Build portable trust</h3><p>Completed work yields signed receipts. Reputation can be traced back to actual coordinated value.</p></article>
+        </div>
+
+        <div class="guide-actions"><button class="btn" type="button" data-go="overview">Explore the overview</button><button class="btn secondary" type="button" data-go="build">Create a program</button><button class="btn ghost" type="button" data-go="trust">Try private review</button></div>
+      </div>
+    </section>
+  </div>
   </div>
 </main>
 
@@ -121,6 +162,33 @@
   const split = (value) => value.split(',').map(v => v.trim()).filter(Boolean);
   let health = null;
   let board = { tasks: [], budgets: [] };
+
+  const tabs = [...document.querySelectorAll('.nav-tab')];
+  const views = [...document.querySelectorAll('[data-view]')];
+  function activateTab(name, updateUrl = true) {
+    if (!tabs.some(tab => tab.dataset.tab === name)) name = 'overview';
+    tabs.forEach(tab => {
+      const active = tab.dataset.tab === name;
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+    views.forEach(view => view.classList.toggle('tab-hidden', view.dataset.view !== name));
+    if (updateUrl) history.replaceState(null, '', `#${name}`);
+    document.querySelector('.workspace')?.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  tabs.forEach((tab, index) => {
+    tab.onclick = () => activateTab(tab.dataset.tab);
+    tab.onkeydown = event => {
+      if (!['ArrowDown','ArrowRight','ArrowUp','ArrowLeft'].includes(event.key)) return;
+      event.preventDefault();
+      const direction = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+      const next = tabs[(index + direction + tabs.length) % tabs.length];
+      next.focus(); activateTab(next.dataset.tab);
+    };
+  });
+  document.querySelectorAll('[data-go]').forEach(button => button.onclick = () => activateTab(button.dataset.go));
+  addEventListener('hashchange', () => activateTab(location.hash.slice(1), false));
+  activateTab(location.hash.slice(1) || 'overview', false);
 
   function token(){ return sessionStorage.getItem('streamlineAdminToken') || ''; }
   async function api(path, options = {}) {
