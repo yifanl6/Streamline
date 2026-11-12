@@ -1,5 +1,5 @@
 # Free Render Blueprint for the Streamline NEAR coordination dashboard.
-# Deploy: https://render.com/deploy?repo=https://github.com/yifanl6/solana-a2a-pay
+# Deploy: https://render.com/deploy?repo=https://github.com/yifanl6/Streamline
 services:
   - type: web
     name: streamline-coordination
