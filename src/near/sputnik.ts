@@ -26,7 +26,12 @@ export interface SputnikBounty {
   [key: string]: unknown;
 }
 
-export class NearRpcError extends Error {}
+export class NearRpcError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'NearRpcError';
+  }
+}
 
 /** Read adapter plus wallet-signable action builders. It never holds a DAO full-access key. */
 export class SputnikClient {
@@ -36,6 +41,11 @@ export class SputnikClient {
     private readonly fetcher: typeof fetch = fetch,
   ) {
     if (!/^[a-z0-9._-]{2,64}$/.test(daoId)) throw new NearRpcError('invalid DAO account id');
+    const daoNetwork = daoId.endsWith('.testnet') ? 'testnet' : daoId.endsWith('.near') ? 'mainnet' : undefined;
+    const rpcNetwork = rpcUrl.includes('testnet') ? 'testnet' : rpcUrl.includes('mainnet') ? 'mainnet' : undefined;
+    if (daoNetwork && rpcNetwork && daoNetwork !== rpcNetwork) {
+      throw new NearRpcError(`DAO account is on ${daoNetwork}, but NEAR_RPC_URL points to ${rpcNetwork}`);
+    }
   }
 
   getPolicy(): Promise<SputnikPolicy> { return this.view('get_policy', {}); }
@@ -87,8 +97,16 @@ export class SputnikClient {
       }),
     });
     if (!response.ok) throw new NearRpcError(`NEAR RPC HTTP ${response.status}`);
-    const body = await response.json() as { result?: { result?: number[] }; error?: { message?: string } };
-    if (body.error) throw new NearRpcError(body.error.message ?? 'NEAR RPC error');
+    const body = await response.json() as {
+      result?: { result?: number[] };
+      error?: { message?: string; data?: string | { error_message?: string } };
+    };
+    if (body.error) {
+      const detail = typeof body.error.data === 'string'
+        ? body.error.data
+        : body.error.data?.error_message;
+      throw new NearRpcError(detail ? `${body.error.message ?? 'NEAR RPC error'}: ${detail}` : body.error.message ?? 'NEAR RPC error');
+    }
     if (!body.result?.result) throw new NearRpcError('NEAR RPC returned no result');
     try {
       return JSON.parse(Buffer.from(body.result.result).toString('utf8')) as T;

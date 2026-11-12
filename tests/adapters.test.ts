@@ -24,6 +24,13 @@ test('Sputnik adapter sends final view queries and builds wallet-signable bounty
   assert.equal(client.completeBounty(3, 'alice.testnet', 'receipt:abc').methodName, 'bounty_done');
 });
 
+test('Sputnik adapter rejects a DAO and RPC network mismatch before making a request', () => {
+  assert.throws(
+    () => new SputnikClient('streamline.sputnik-dao.near', 'https://rpc.testnet.near.org'),
+    /DAO account is on mainnet, but NEAR_RPC_URL points to testnet/,
+  );
+});
+
 test('private reviewer verifies preflight before inference and returns only hashes and verdict', async () => {
   const calls: string[] = [];
   const fetcher: typeof fetch = async (input) => {
@@ -49,6 +56,13 @@ test('private reviewer verifies preflight before inference and returns only hash
   assert.equal(result.decision, 'pass');
   assert.equal('deliverable' in result, false);
   assert.equal(calls.length, 3);
+  const attestationUrl = new URL(calls[0]);
+  assert.equal(attestationUrl.searchParams.get('model'), 'model-id');
+  assert.equal(attestationUrl.searchParams.has('provider'), false);
+  assert.equal(attestationUrl.searchParams.has('include_tls_fingerprint'), false);
+  const signatureUrl = new URL(calls[2]);
+  assert.equal(signatureUrl.searchParams.get('model'), 'model-id');
+  assert.equal(signatureUrl.searchParams.get('signing_algo'), 'ecdsa');
 });
 
 test('private reviewer fails closed and never calls inference when attestation is not cryptographically verified', async () => {

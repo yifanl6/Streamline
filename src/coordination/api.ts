@@ -271,5 +271,13 @@ function requireAdmin(expected: string) {
 
 export function loadApiSigningKey(): KeyObject | undefined {
   const encoded = process.env.STREAMLINE_SIGNING_KEY;
-  return encoded ? importPrivateKey(encoded) : undefined;
+  if (!encoded || encoded.startsWith('replace-')) {
+    if (encoded) console.warn('[coordination] STREAMLINE_SIGNING_KEY is a placeholder; using an ephemeral demo key');
+    return undefined;
+  }
+  try {
+    return importPrivateKey(encoded);
+  } catch {
+    throw new Error('STREAMLINE_SIGNING_KEY is invalid; run npm run coordination:keygen and copy its STREAMLINE_SIGNING_KEY value into .env');
+  }
 }

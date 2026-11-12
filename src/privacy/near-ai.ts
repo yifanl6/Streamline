@@ -63,15 +63,13 @@ export class NearAiPrivateReviewer {
     const nonce = randomBytes(32).toString('hex');
     const attestationUrl = new URL(`${this.baseUrl}/attestation/report`);
     attestationUrl.searchParams.set('model', this.model);
-    attestationUrl.searchParams.set('provider', 'near');
-    attestationUrl.searchParams.set('include_tls_fingerprint', 'false');
     attestationUrl.searchParams.set('signing_algo', 'ecdsa');
     attestationUrl.searchParams.set('nonce', nonce);
 
     const reportResponse = await this.fetcher(attestationUrl, {
       headers: { accept: 'application/json', 'x-no-aliasing': 'true', authorization: `Bearer ${this.apiKey}` },
     });
-    if (!reportResponse.ok) throw new PrivateReviewError(`attestation request failed (${reportResponse.status})`);
+    if (!reportResponse.ok) throw new PrivateReviewError(await responseError('attestation request', reportResponse));
     const report: unknown = await reportResponse.json();
     const attestation = await this.verifier.verifyPreflight(report, nonce, this.model);
     if (!attestation.verified) throw new PrivateReviewError('TEE preflight evidence did not verify');
@@ -99,7 +97,7 @@ export class NearAiPrivateReviewer {
       body: requestBody,
     });
     const responseBytes = await completionResponse.text();
-    if (!completionResponse.ok) throw new PrivateReviewError(`private review failed (${completionResponse.status})`);
+    if (!completionResponse.ok) throw new PrivateReviewError(responseTextError('private review', completionResponse.status, responseBytes));
     const responseHash = digest(responseBytes);
     const completion = parseJson(responseBytes, 'completion') as {
       id?: string;
@@ -107,10 +105,13 @@ export class NearAiPrivateReviewer {
     };
     if (!completion.id) throw new PrivateReviewError('completion has no id');
 
-    const signatureResponse = await this.fetcher(`${this.baseUrl}/signature/${encodeURIComponent(completion.id)}?signing_algo=ecdsa`, {
+    const signatureUrl = new URL(`${this.baseUrl}/signature/${encodeURIComponent(completion.id)}`);
+    signatureUrl.searchParams.set('model', this.model);
+    signatureUrl.searchParams.set('signing_algo', 'ecdsa');
+    const signatureResponse = await this.fetcher(signatureUrl, {
       headers: { accept: 'application/json', authorization: `Bearer ${this.apiKey}` },
     });
-    if (!signatureResponse.ok) throw new PrivateReviewError(`response signature unavailable (${signatureResponse.status})`);
+    if (!signatureResponse.ok) throw new PrivateReviewError(await responseError('response signature', signatureResponse));
     const signature: unknown = await signatureResponse.json();
     const responseVerification = await this.verifier.verifyResponse({ signature, preflight: attestation, model: this.model, requestHash, responseHash });
     if (!responseVerification.verified) throw new PrivateReviewError('TEE response signature did not verify');
@@ -138,4 +139,25 @@ export class FailClosedEvidenceVerifier implements NearAiEvidenceVerifier {
 const digest = (bytes: string): string => createHash('sha256').update(bytes).digest('hex');
 function parseJson(text: string, label: string): unknown {
   try { return JSON.parse(text); } catch { throw new PrivateReviewError(`${label} is not valid JSON`); }
+}
+
+async function responseError(label: string, response: Response): Promise<string> {
+  return responseTextError(label, response.status, await response.text());
+}
+
+function responseTextError(label: string, status: number, text: string): string {
+  let detail = '';
+  try {
+    const payload = JSON.parse(text) as { error?: string | { message?: string }; message?: string; detail?: string };
+    detail = typeof payload.error === 'string' ? payload.error : payload.error?.message ?? payload.message ?? payload.detail ?? '';
+  } catch {
+    detail = text;
+  }
+  const safeDetail = detail
+    .replace(/Bearer\s+\S+/gi, 'Bearer [redacted]')
+    .replace(/sk-[A-Za-z0-9_-]+/g, '[redacted key]')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 300);
+  return `${label} failed (${status})${safeDetail ? `: ${safeDetail}` : ''}`;
 }
