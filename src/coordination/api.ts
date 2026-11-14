@@ -53,6 +53,10 @@ export function createCoordinationApp(options: ApiOptions) {
 
   const app = express();
   app.disable('x-powered-by');
+  app.use((_req, res, next) => {
+    res.set('cache-control', 'no-store');
+    next();
+  });
   app.use(express.json({ limit: '256kb' }));
 
   app.get('/', (_req, res) => res.sendFile(dashboardPath));

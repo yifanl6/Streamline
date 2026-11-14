@@ -7,27 +7,27 @@
   <meta name="description" content="Shared DAO budgets, secure agent procurement, private review, and receipt-backed reputation.">
   <style>
     :root {
-      --bg:#f4f6f8; --panel:#ffffff; --panel2:#e9eef5; --ink:#111827; --muted:#526071;
-      --line:#cbd3dd; --green:#173a63; --cyan:#175cd3; --amber:#9a6700; --red:#b42318;
-      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif;
+      --bg:#f7f5f0; --panel:#ffffff; --panel2:#edf1f5; --ink:#0d1726; --muted:#3f4b59;
+      --line:#c8ced6; --green:#1f3a5f; --cyan:#245ea6; --amber:#8a5a00; --red:#a61b12;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif; --serif:Georgia,'Times New Roman',Times,serif;
     }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans)}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans)}
     button,input,textarea,select{font:inherit} button{cursor:pointer}.mono{font-family:var(--mono)}
     header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
     .bar,.shell{max-width:1440px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.04em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font-family:var(--mono)}
+    .brand{display:flex;align-items:center;gap:12px;font:700 18px var(--serif);letter-spacing:.01em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font:12px var(--mono)}
     .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}.dot.ok{background:#16835c}
-    .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:end;margin-bottom:26px}
+    .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:block;max-width:780px;margin-bottom:34px}
     .sidebar{position:sticky;top:96px}.side-kicker{font:10px var(--mono);color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px 12px}.side-nav{display:grid;gap:3px}.nav-tab{width:100%;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:8px;text-align:left;border:0;border-left:2px solid transparent;background:transparent;color:var(--muted);padding:11px 12px}.nav-tab:hover{background:var(--panel);color:var(--ink)}.nav-tab[aria-selected="true"]{background:var(--panel2);border-left-color:var(--green);color:var(--ink)}.nav-index{font:10px var(--mono);color:var(--green)}.nav-copy strong{display:block;font-size:13px}.nav-copy small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.side-note{border-top:1px solid var(--line);margin-top:18px;padding:16px 12px 0;color:var(--muted);font-size:11px}.side-note strong{display:block;color:var(--ink);margin-bottom:5px}
-    h1{font-size:clamp(32px,5vw,58px);line-height:1.03;letter-spacing:-.045em;margin:0;max-width:800px}.hero p{margin:0;color:var(--muted);font-size:16px;max-width:480px}
+    h1,h2,h3{font-family:var(--serif)}h1{font-size:clamp(42px,6vw,68px);font-weight:600;line-height:1;letter-spacing:-.035em;margin:0;max-width:800px}.hero p{margin:14px 0 0;color:var(--muted);font-size:17px;max-width:720px}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:34px 28px}.panel{background:transparent;border:0;min-width:0}
-    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 12px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 12px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
     .content{padding:18px 0 8px}.summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.metric{padding:20px 18px;border-right:1px solid var(--line)}.metric:first-child{padding-left:0}.metric:last-child{border:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font:25px var(--mono);margin-top:5px}.metric .detail{color:var(--muted);font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis}
     .board{grid-column:span 7}.setup{grid-column:span 4}.create{grid-column:span 8}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 5}.guide{grid-column:span 12}.tab-hidden{display:none!important}
     .task{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task-title{font-weight:650}.task-meta{color:var(--muted);font:11px var(--mono);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid currentColor;padding:3px 7px;font:10px var(--mono);text-transform:uppercase;color:var(--cyan)}.badge.open{color:var(--green)}.badge.completed{color:var(--cyan)}
     label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}.field{margin-bottom:14px}input,textarea,select{width:100%;border:1px solid #aeb8c5;background:var(--panel);color:var(--ink);padding:11px 12px;outline:none}textarea{min-height:112px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(23,58,99,.12)}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#fff;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:#9da8b5}.btn:disabled{opacity:.5;cursor:wait}
-    .helper{color:var(--muted);font-size:12px;margin:0 0 18px;max-width:720px}
+    .helper,.section-desc{color:var(--muted);font-size:13px;margin:0 0 18px;max-width:720px}.section-desc{font-size:14px;max-width:640px}
     .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere;font-family:var(--mono)}
     .empty{color:var(--muted);padding:16px 0}.error{color:var(--red)}.success{color:#067647}.output{margin-top:13px;padding:14px;background:var(--panel2);border-left:3px solid var(--green);font:12px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}
     .token-lock{display:flex;gap:8px}.token-lock input{flex:1}.tiny{font-size:11px;color:var(--muted);margin-top:7px}
@@ -51,8 +51,8 @@
   </aside>
   <div class="workspace">
   <section class="hero">
-    <div><h1>Coordinate value. Prove the work.</h1></div>
-    <p>DAO-controlled budgets fund scoped agent work. Every purchase is policy-checked before signing, every output can be privately reviewed in a TEE, and every reputation point resolves to a completed receipt.</p>
+    <div><h1>Streamline</h1></div>
+    <p>Coordinate community-funded work from one clear place. Streamline connects shared budgets, scoped tasks, private review, and receipt-backed reputation while your Sputnik DAO remains in control of the treasury.</p>
   </section>
 
   <div class="grid">
@@ -64,8 +64,8 @@
     </section>
 
     <section class="panel board" data-view="overview">
-      <div class="panel-head"><h2>Community task board</h2><span class="eyebrow">Public</span></div>
-      <div class="content"><div id="tasks" class="empty">No tasks yet.</div></div>
+      <div class="panel-head"><h2>Community dashboard</h2><span class="eyebrow">Public</span></div>
+      <div class="content"><p class="section-desc">A shared view of the work your community has funded. See which tasks are open, claimed, or completed, and which approved program supports each task.</p><div id="tasks" class="empty">No tasks yet.</div></div>
     </section>
 
     <section id="view-build" class="panel setup tab-hidden" data-view="build" role="tabpanel">
@@ -202,6 +202,7 @@
       tab.tabIndex = active ? 0 : -1;
     });
     views.forEach(view => view.classList.toggle('tab-hidden', view.dataset.view !== name));
+    document.querySelector('.hero')?.classList.toggle('tab-hidden', name !== 'overview');
     if (updateUrl) history.replaceState(null, '', `#${name}`);
     document.querySelector('.workspace')?.scrollIntoView({behavior:'smooth', block:'start'});
   }
@@ -224,11 +225,11 @@
   async function api(path, options = {}) {
     const headers = { ...(options.body ? {'content-type':'application/json'} : {}), ...(options.admin ? {authorization:`Bearer ${token()}`} : {}) };
     const method = String(options.method || 'GET').toUpperCase();
-    const attempts = method === 'GET' ? 3 : 1;
+    const attempts = method === 'GET' ? 7 : 1;
     let lastError;
     for (let attempt = 0; attempt < attempts; attempt++) {
       try {
-        const response = await fetch(path, {...options, headers:{...headers,...options.headers}});
+        const response = await fetch(path, {...options, cache:'no-store', headers:{...headers,...options.headers}});
         const text = await response.text();
         let body = {};
         try { body = text ? JSON.parse(text) : {}; }
@@ -238,13 +239,13 @@
       } catch (error) {
         lastError = error;
         if (attempt < attempts - 1) {
-          $('statusText').textContent = `Hosted service waking up · retry ${attempt + 1}/${attempts - 1}`;
-          await pause(1200 * (attempt + 1));
+          $('statusText').textContent = `Waking hosted service · retry ${attempt + 1}/${attempts - 1}`;
+          await pause(Math.min(2000 * (attempt + 1), 10000));
         }
       }
     }
     const message = lastError?.message === 'Failed to fetch'
-      ? 'The hosted service could not be reached. It may be waking up; wait a moment and retry.'
+      ? 'The free hosted service did not wake within about a minute. Select Retry connection to try again.'
       : lastError?.message || 'The hosted service could not be reached.';
     throw new Error(message);
   }
