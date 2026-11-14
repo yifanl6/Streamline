@@ -136,7 +136,7 @@
     <section class="panel reputation tab-hidden" data-view="trust">
       <div class="panel-head"><h2>Reputation lookup</h2><span class="eyebrow">Receipt-backed</span></div>
       <div class="content">
-        <form id="reputationForm" autocomplete="off"><div class="field"><label>Named NEAR account</label><input name="accountId" autocomplete="off" placeholder="e.g. alice.near"></div><button class="btn secondary">Look up</button></form>
+        <form id="reputationForm" autocomplete="off"><div class="field"><label>Named NEAR account</label><input name="accountId" autocomplete="off" placeholder="e.g. alice.near" required></div><button class="btn secondary" type="submit">Look up</button></form>
         <div id="reputationOutput" class="empty">Enter an account to inspect its traceable history.</div>
       </div>
     </section>
@@ -326,7 +326,7 @@
     throw new Error(message);
   }
   function output(id, value, kind='success') { $(id).innerHTML = `<div class="output ${kind}">${esc(typeof value === 'string' ? value : JSON.stringify(value,null,2))}</div>`; }
-  function withBusy(form, fn) { return async (event) => { event.preventDefault(); const button=form.querySelector('button[type=submit]'); button.disabled=true; try{await fn(new FormData(form));}catch(e){output(form.id==='reviewForm'?'reviewOutput':form.id==='reputationForm'?'reputationOutput':'createOutput',e.message,'error')}finally{button.disabled=false} }; }
+  function withBusy(form, fn) { return async (event) => { event.preventDefault(); const button=form.querySelector('button[type=submit],button:not([type])'); if(button)button.disabled=true; try{await fn(new FormData(form));}catch(e){output(form.id==='reviewForm'?'reviewOutput':form.id==='reputationForm'?'reputationOutput':'createOutput',e.message,'error')}finally{if(button)button.disabled=false} }; }
   function upsert(items, value, key) { return [...items.filter(item => item[key] !== value[key]), value]; }
   function syncInBackground() { refresh().catch(() => { $('statusText').textContent='Saved · background sync delayed'; }); }
 
@@ -363,7 +363,7 @@
   $('programForm').onsubmit=withBusy($('programForm'),async data=>{if(!health.daoId)throw new Error('Set SPUTNIK_DAO_ID before registering a DAO-backed program');const body={version:1,id:data.get('id'),daoId:health.daoId,bountyId:Number(data.get('bountyId')),asset:data.get('asset'),network:data.get('network'),total:data.get('total'),expiresAt:Date.now()+Number(data.get('hours'))*3600000,allowedServices:split(data.get('services')),allowedPayees:split(data.get('payees'))};const created=await api('/v1/programs',{method:'POST',admin:true,body:JSON.stringify(body)});board.budgets=upsert(board.budgets,created,'programId');renderState();output('createOutput','Program registered and ready for a task.');syncInBackground()});
   $('taskForm').onsubmit=withBusy($('taskForm'),async data=>{const created=await api('/v1/tasks',{method:'POST',admin:true,body:JSON.stringify({programId:data.get('programId'),title:data.get('title')})});board.tasks=upsert(board.tasks,created,'id');renderState();output('createOutput','Task posted and visible on Overview.');syncInBackground()});
   $('reviewForm').onsubmit=withBusy($('reviewForm'),async data=>{const result=await api('/v1/private-review',{method:'POST',admin:true,body:JSON.stringify({criteria:data.get('criteria'),deliverable:data.get('deliverable')})});output('reviewOutput',{decision:result.decision,reasons:result.reasons,model:result.model,requestHash:result.requestHash,responseHash:result.responseHash,attestationVerified:result.attestation.verified,responseVerified:result.responseVerification.verified,checks:[...result.attestation.checks,...result.responseVerification.checks]})});
-  $('reputationForm').onsubmit=withBusy($('reputationForm'),async data=>{const result=await api(`/v1/reputation/${encodeURIComponent(data.get('accountId'))}`);output('reputationOutput',result)});
+  $('reputationForm').onsubmit=withBusy($('reputationForm'),async data=>{const accountId=String(data.get('accountId')||'').trim();if(!accountId)throw new Error('Enter a named NEAR account');const result=await api(`/v1/reputation/${encodeURIComponent(accountId)}`);output('reputationOutput',result)});
   $('syncDao').onclick=async()=>{try{const result=await api('/v1/dao');output('daoOutput',{daoId:result.daoId,roles:result.policy.roles?.length??0,proposalBond:result.policy.proposal_bond,bounties:result.bounties.length,proposals:result.proposals.length})}catch(e){output('daoOutput',e.message,'error')}};
   function showConnectionError(error) {
     $('statusDot').classList.remove('ok');

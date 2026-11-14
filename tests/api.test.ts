@@ -26,6 +26,7 @@ test('coordination API exposes an authenticated shared-budget workflow', async (
   assert.match(dashboard.text, /Your demo checklist/);
   assert.match(dashboard.text, /Program registered and ready for a task/);
   assert.match(dashboard.text, /Task posted and visible on Overview/);
+  assert.match(dashboard.text, /class="btn secondary" type="submit">Look up/);
   assert.match(dashboard.text, /window\.__STREAMLINE_BOOTSTRAP__=/);
   assert.match(dashboard.headers['cache-control'], /no-store/);
 
