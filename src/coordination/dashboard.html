@@ -7,8 +7,9 @@
   <meta name="description" content="Shared DAO budgets, secure agent procurement, private review, and receipt-backed reputation.">
   <style>
     :root {
-      --bg:#f7f5f0; --panel:#ffffff; --panel2:#edf1f5; --ink:#0d1726; --muted:#3f4b59;
-      --line:#c8ced6; --green:#1f3a5f; --cyan:#245ea6; --amber:#8a5a00; --red:#a61b12;
+      --bg:#f6f8fb; --panel:#ffffff; --panel2:#edf3f8; --ink:#10233f; --muted:#536275;
+      --line:#ccd6e2; --green:#123b5d; --cyan:#2563eb; --teal:#087f7a; --amber:#b76b00; --red:#b42318;
+      --blue-soft:#eaf1ff; --teal-soft:#e6f5f2; --amber-soft:#fff3d8; --violet-soft:#f0edff;
       --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,'SF Pro Text','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans)}
@@ -17,13 +18,13 @@
     .bar,.shell{max-width:1440px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
     .brand{display:flex;align-items:center;gap:12px;font:700 15px var(--sans);letter-spacing:.02em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font:12px var(--mono)}
     .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}.dot.ok{background:#16835c}
-    .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:block;max-width:780px;margin-bottom:34px}
+    .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:block;max-width:860px;margin-bottom:30px}
     .sidebar{position:sticky;top:96px}.side-kicker{font:10px var(--mono);color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px 12px}.side-nav{display:grid;gap:3px}.nav-tab{width:100%;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:8px;text-align:left;border:0;border-left:2px solid transparent;background:transparent;color:var(--muted);padding:11px 12px}.nav-tab:hover{background:var(--panel);color:var(--ink)}.nav-tab[aria-selected="true"]{background:var(--panel2);border-left-color:var(--green);color:var(--ink)}.nav-index{font:10px var(--mono);color:var(--green)}.nav-copy strong{display:block;font-size:13px}.nav-copy small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.side-note{border-top:1px solid var(--line);margin-top:18px;padding:16px 12px 0;color:var(--muted);font-size:11px}.side-note strong{display:block;color:var(--ink);margin-bottom:5px}
-    h1,h2,h3{font-family:var(--sans)}h1{font-size:clamp(40px,5.5vw,62px);font-weight:650;line-height:1.04;letter-spacing:-.04em;margin:0;max-width:800px}.hero p{margin:14px 0 0;color:var(--muted);font-size:16px;max-width:720px}
+    h1,h2,h3{font-family:var(--sans)}h1{font-size:clamp(40px,5.5vw,62px);font-weight:650;line-height:1.04;letter-spacing:-.04em;margin:0;max-width:800px}.hero p{margin:14px 0 0;color:var(--muted);font-size:16px;max-width:720px}.hero-actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:34px 28px}.panel{background:transparent;border:0;min-width:0}
     .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:0 0 12px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:18px;font-weight:650;letter-spacing:-.015em;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
     .content{padding:18px 0 8px}.summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.metric{padding:20px 18px;border-right:1px solid var(--line)}.metric:first-child{padding-left:0}.metric:last-child{border:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font:25px var(--mono);margin-top:5px}.metric .detail{color:var(--muted);font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis}
-    .board{grid-column:span 7}.setup{grid-column:span 4}.create{grid-column:span 8}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 5}.guide{grid-column:span 12}.tab-hidden{display:none!important}
+    .launchpad{grid-column:span 12}.board{grid-column:span 7}.setup{grid-column:span 4}.create{grid-column:span 8}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 5}.guide{grid-column:span 12}.tab-hidden{display:none!important}
     .task{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task-title{font-weight:650}.task-meta{color:var(--muted);font:11px var(--mono);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid currentColor;padding:3px 7px;font:10px var(--mono);text-transform:uppercase;color:var(--cyan)}.badge.open{color:var(--green)}.badge.completed{color:var(--cyan)}
     label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}.field{margin-bottom:14px}input,textarea,select{width:100%;border:1px solid #aeb8c5;background:var(--panel);color:var(--ink);padding:11px 12px;outline:none}textarea{min-height:112px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(23,58,99,.12)}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#fff;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:#9da8b5}.btn:disabled{opacity:.5;cursor:wait}::placeholder{color:#8a96a5;opacity:1}
@@ -31,9 +32,13 @@
     .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere;font-family:var(--mono)}
     .empty{color:var(--muted);padding:16px 0}.error{color:var(--red)}.success{color:#067647}.output{margin-top:13px;padding:14px;background:var(--panel2);border-left:3px solid var(--green);font:12px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}
     .token-lock{display:flex;gap:8px}.token-lock input{flex:1}.tiny{font-size:11px;color:var(--muted);margin-top:7px}
-    .guide .content{max-width:900px}.guide-intro{max-width:760px}.guide-intro h2{font-size:34px;line-height:1.12;margin:0 0 14px;letter-spacing:-.035em}.guide-intro p{color:var(--ink);font-size:16px;margin:0}.guide-section{margin-top:36px;padding-top:24px;border-top:1px solid var(--line)}.guide-section h3{font-size:19px;margin:0 0 6px}.guide-section>p{color:var(--muted);margin:0 0 18px}.role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:20px}.role-card{padding:0}.role-card h3{font-size:15px;margin:7px 0}.role-card p{font-size:13px;color:var(--muted);margin:0}.role-label{font:10px var(--mono);color:var(--green);text-transform:uppercase;letter-spacing:.09em}.steps{display:block;margin-top:12px}.step{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;padding:19px 0;border-bottom:1px solid var(--line)}.step:last-child{border-bottom:0}.step h3{font-size:15px;margin:0 0 4px}.step p{font-size:13px;color:var(--muted);margin:0}.step p+p{margin-top:7px}.step-number{display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--green);color:var(--green);font:11px var(--mono)}.guide-facts{display:grid;grid-template-columns:170px 1fr;gap:10px 22px;margin:16px 0 0}.guide-facts dt{color:var(--ink);font-weight:700}.guide-facts dd{color:var(--muted);margin:0}.guide-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
-    @media(max-width:900px){.shell{display:block;padding-top:0}.sidebar{position:sticky;top:68px;z-index:8;background:rgba(255,255,255,.97);margin:0 -22px 24px;padding:10px 22px;border-bottom:1px solid var(--line);overflow-x:auto}.side-kicker,.side-note,.nav-copy small{display:none}.side-nav{display:flex;min-width:max-content}.nav-tab{width:auto;grid-template-columns:20px auto;padding:9px 12px}.hero{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.board,.setup,.create,.privacy,.reputation,.dao{grid-column:span 12}.role-grid{grid-template-columns:1fr;gap:22px}}
-    @media(max-width:540px){.bar,.shell{padding-left:14px;padding-right:14px}.sidebar{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}.summary{grid-template-columns:1fr}.metric{padding-left:0;border-right:0;border-bottom:1px solid var(--line)!important}.row{grid-template-columns:1fr}.bar .status span:last-child{display:none}.hero p{font-size:14px}.guide-facts{grid-template-columns:1fr;gap:2px}.guide-facts dd{margin-bottom:12px}}
+    .use-case-picker{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 22px}.use-case{min-height:76px;padding:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-align:left;font-weight:700;line-height:1.3}.use-case small{display:block;margin-top:5px;color:var(--muted);font-weight:500;font-size:10px}.use-case:hover{border-color:var(--cyan);background:var(--blue-soft)}.use-case[aria-pressed="true"]{border-color:var(--cyan);background:var(--blue-soft);box-shadow:inset 0 -3px 0 var(--cyan)}
+    .flow-context{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:16px}.flow-context h3{font-size:20px;margin:0 0 4px}.flow-context p{margin:0;color:var(--muted);max-width:700px}.flow-note{color:var(--teal);font:10px var(--mono);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}.flow-map{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}.flow-step{position:relative;min-height:132px;padding:16px;border:1px solid var(--line);background:var(--panel);text-align:left;color:var(--ink)}.flow-step:not(:last-child)::after{content:'→';position:absolute;right:-19px;top:50%;transform:translateY(-50%);color:var(--cyan);font:18px var(--mono)}.flow-step:hover,.flow-step:focus-visible{border-color:var(--cyan);box-shadow:0 7px 22px rgba(16,35,63,.08)}.flow-number{display:inline-grid;place-items:center;width:25px;height:25px;border-radius:50%;background:var(--blue-soft);color:var(--cyan);font:10px var(--mono)}.flow-step:nth-child(2) .flow-number{background:var(--teal-soft);color:var(--teal)}.flow-step:nth-child(3) .flow-number{background:var(--amber-soft);color:var(--amber)}.flow-step:nth-child(4) .flow-number{background:var(--violet-soft);color:#6750a4}.flow-step strong{display:block;margin:10px 0 4px;font-size:14px}.flow-step small{display:block;color:var(--muted);font-size:11px;line-height:1.45}.flow-destination{display:block;margin-top:9px;color:var(--cyan);font:10px var(--mono);text-transform:uppercase}
+    .guide .content{max-width:940px}.guide-intro{max-width:760px}.guide-intro h2{font-size:30px;line-height:1.15;margin:0 0 10px;letter-spacing:-.03em}.guide-intro p{color:var(--muted);font-size:15px;margin:0}.demo-banner{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:24px;padding:17px 18px;background:var(--teal-soft);border-left:4px solid var(--teal)}.demo-banner strong{display:block;color:var(--ink)}.demo-banner span{display:block;color:var(--muted);font-size:12px;margin-top:2px}.guide-section{margin-top:30px;padding-top:22px;border-top:1px solid var(--line)}.guide-section h3{font-size:19px;margin:0 0 6px}.guide-section>p{color:var(--muted);margin:0 0 18px}.checklist{display:grid;gap:8px;margin-top:16px}.check-step{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;align-items:center;padding:15px 16px;border:1px solid var(--line);background:var(--panel)}.check-number{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--panel2);color:var(--green);font:11px var(--mono)}.check-step h3{font-size:14px;margin:0 0 2px}.check-step p{font-size:12px;color:var(--muted);margin:0}.check-status{font:10px var(--mono);color:var(--muted);text-transform:uppercase;margin-right:8px}.check-status.ready{color:var(--teal)}.check-actions{display:flex;align-items:center;gap:8px}.quick-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.quick-fact{padding:15px;background:var(--panel2);border-top:3px solid var(--cyan)}.quick-fact:nth-child(2){border-color:var(--teal)}.quick-fact:nth-child(3){border-color:var(--amber)}.quick-fact strong{display:block;font-size:13px}.quick-fact span{display:block;color:var(--muted);font-size:11px;margin-top:4px}.glossary{margin-top:16px;border-top:1px solid var(--line)}.glossary details{border-bottom:1px solid var(--line);padding:12px 0}.glossary summary{cursor:pointer;font-weight:700;font-size:13px}.glossary p{color:var(--muted);font-size:12px;margin:7px 0 0;max-width:720px}
+    @media(max-width:1050px){.use-case-picker{grid-template-columns:repeat(3,1fr)}.flow-map{grid-template-columns:1fr 1fr}.flow-step:not(:last-child)::after{display:none}}
+    @media(max-width:900px){.shell{display:block;padding-top:0}.sidebar{position:sticky;top:68px;z-index:8;background:rgba(255,255,255,.97);margin:0 -22px 24px;padding:10px 22px;border-bottom:1px solid var(--line);overflow-x:auto}.side-kicker,.side-note,.nav-copy small{display:none}.side-nav{display:flex;min-width:max-content}.nav-tab{width:auto;grid-template-columns:20px auto;padding:9px 12px}.hero{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--line)}.board,.setup,.create,.privacy,.reputation,.dao{grid-column:span 12}.quick-facts{grid-template-columns:1fr}}
+    @media(max-width:640px){.use-case-picker{grid-template-columns:1fr 1fr}.flow-map{grid-template-columns:1fr}.flow-context,.demo-banner{display:block}.flow-note{display:block;margin-top:8px}.demo-banner .btn{margin-top:12px}.check-step{grid-template-columns:34px 1fr}.check-actions{grid-column:2;justify-content:space-between}}
+    @media(max-width:540px){.bar,.shell{padding-left:14px;padding-right:14px}.sidebar{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}.summary{grid-template-columns:1fr}.metric{padding-left:0;border-right:0;border-bottom:1px solid var(--line)!important}.row{grid-template-columns:1fr}.bar .status span:last-child{display:none}.hero p{font-size:14px}.use-case-picker{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -52,7 +57,8 @@
   <div class="workspace">
   <section class="hero">
     <div><h1>Streamline</h1></div>
-    <p>Coordinate community-funded work from one clear place. Streamline connects shared budgets, scoped tasks, private review, and receipt-backed reputation while your Sputnik DAO remains in control of the treasury.</p>
+    <p>Coordinate community funds with programmable payments. Choose what your group wants to accomplish, then move from a bounded budget to verified work and DAO-controlled approval.</p>
+    <div class="hero-actions"><button class="btn" type="button" data-go="build">Create a program</button><button class="btn secondary" type="button" data-go="guide">Try the guided demo</button></div>
   </section>
 
   <div class="grid">
@@ -61,6 +67,21 @@
       <div class="metric"><div class="label">Tasks</div><div id="taskCount" class="value">—</div><div class="detail">Open and claimed work</div></div>
       <div class="metric"><div class="label">Available</div><div id="remainingTotal" class="value">—</div><div class="detail">base units across programs</div></div>
       <div class="metric"><div class="label">Treasury</div><div id="daoState" class="value">—</div><div id="daoId" class="detail">No DAO loaded</div></div>
+    </section>
+
+    <section class="panel launchpad" data-view="overview" aria-labelledby="launchpadTitle">
+      <div class="panel-head"><h2 id="launchpadTitle">What does your community want to do?</h2><span class="eyebrow">Choose a use case</span></div>
+      <div class="content">
+        <div class="use-case-picker" role="group" aria-label="Community use cases">
+          <button class="use-case" type="button" data-case="bounty" aria-pressed="true">Community bounty<small>Fund a clear deliverable</small></button>
+          <button class="use-case" type="button" data-case="rewards" aria-pressed="false">Contributor rewards<small>Recognize completed work</small></button>
+          <button class="use-case" type="button" data-case="agents" aria-pressed="false">Agent service budget<small>Bound autonomous spending</small></button>
+          <button class="use-case" type="button" data-case="microloan" aria-pressed="false">Microloan pool<small>Coordinate small allocations</small></button>
+          <button class="use-case" type="button" data-case="mutual-aid" aria-pressed="false">Mutual aid<small>Route accountable support</small></button>
+        </div>
+        <div class="flow-context"><div><h3 id="flowTitle">Fund a community bounty</h3><p id="flowDescription">Define one piece of work, cap its budget, verify the result privately, and return approval to the DAO.</p></div><span class="flow-note">Select a step to continue</span></div>
+        <div id="flowMap" class="flow-map" aria-live="polite"></div>
+      </div>
     </section>
 
     <section class="panel board" data-view="overview">
@@ -126,59 +147,39 @@
     </section>
 
     <section id="view-guide" class="panel guide tab-hidden" data-view="guide" role="tabpanel">
-      <div class="panel-head"><h2>How to use Streamline</h2><span class="eyebrow">Start here</span></div>
+      <div class="panel-head"><h2>How to use Streamline</h2><span class="eyebrow">Guided demo</span></div>
       <div class="content">
         <div class="guide-intro">
-          <h2>Turn a community decision into accountable work.</h2>
-          <p>Streamline sits on top of a Sputnik DAO treasury. The DAO still controls the funds and approvals; Streamline gives the community a practical workflow for defining work, limiting how money may be used, reviewing a deliverable privately, and linking reputation to completed work.</p>
+          <h2>Complete one workflow from budget to proof.</h2>
+          <p>Follow the checklist in order. Each action opens the part of Streamline you need, and your Sputnik DAO remains the treasury and approval layer.</p>
         </div>
+        <div class="demo-banner"><div><strong>Safe demo mode</strong><span>Use test data and testnet assets. Never paste a recovery phrase or wallet private key.</span></div><button class="btn secondary" type="button" data-go="overview">Choose a use case</button></div>
 
         <section class="guide-section">
-          <h3>What you need before starting</h3>
-          <p>Reading the public dashboard requires nothing. Running the complete demo requires the operator credentials and configured integrations.</p>
-          <dl class="guide-facts">
-            <dt>For visitors</dt><dd>No wallet or login is required to view tasks, budget summaries, DAO state, or reputation records.</dd>
-            <dt>For operators</dt><dd>Copy <span class="mono">STREAMLINE_ADMIN_TOKEN</span> from the hosting environment and enter it under Build &amp; fund. The token remains in the current browser tab.</dd>
-            <dt>For DAO data</dt><dd>The server needs the public Sputnik DAO account ID. Streamline reads policy, bounties, and proposals without holding a DAO private key.</dd>
-            <dt>For private review</dt><dd>The server needs a funded NEAR AI Cloud API key. The selected model must support hardware attestation and signed responses.</dd>
-          </dl>
-        </section>
-
-        <section class="guide-section">
-          <h3>Choose how you are using it</h3>
-          <p>The interface exposes different parts of the workflow depending on your role.</p>
-          <div class="role-grid">
-            <article class="role-card"><span class="role-label">Community member</span><h3>Follow the money</h3><p>Use Overview to see which work is open, how much budget remains, and what the connected Sputnik DAO reports. These are read-only actions.</p></article>
-            <article class="role-card"><span class="role-label">Contributor or agent</span><h3>Take accountable work</h3><p>Choose an open task and associate it with a named NEAR account. The account becomes part of the task and eventual receipt trail.</p></article>
-            <article class="role-card"><span class="role-label">DAO operator</span><h3>Define safe boundaries</h3><p>Use Build &amp; fund to register a program, restrict approved services and recipients, post tasks, and review work before settlement.</p></article>
+          <h3>Your demo checklist</h3>
+          <p>The status labels use the current server snapshot. They are guidance, not wallet or on-chain confirmation.</p>
+          <div class="checklist">
+            <article class="check-step"><span class="check-number">1</span><div><h3>Confirm the Sputnik treasury</h3><p>Read the connected DAO policy, bounties, and proposals.</p></div><div class="check-actions"><span id="checkDao" class="check-status">Check setup</span><button class="btn ghost" type="button" data-go="overview" data-focus="syncDao">Open</button></div></article>
+            <article class="check-step"><span class="check-number">2</span><div><h3>Unlock the operator session</h3><p>Enter the hosted admin token. It stays in this browser tab.</p></div><div class="check-actions"><span id="checkToken" class="check-status">Not unlocked</span><button class="btn ghost" type="button" data-go="build" data-focus="adminToken">Open</button></div></article>
+            <article class="check-step"><span class="check-number">3</span><div><h3>Create a bounded program and task</h3><p>Set the budget, expiration, allowed payees, and allowed services.</p></div><div class="check-actions"><span id="checkProgram" class="check-status">Not started</span><button class="btn ghost" type="button" data-go="build" data-focus="programForm">Open</button></div></article>
+            <article class="check-step"><span class="check-number">4</span><div><h3>Run private verification</h3><p>Compare a deliverable with its acceptance criteria through NEAR AI.</p></div><div class="check-actions"><span id="checkPrivacy" class="check-status">Check setup</span><button class="btn ghost" type="button" data-go="trust" data-focus="reviewForm">Open</button></div></article>
+            <article class="check-step"><span class="check-number">5</span><div><h3>Inspect reputation evidence</h3><p>Look up a named account and trace its score to completion receipts.</p></div><div class="check-actions"><span class="check-status ready">Ready</span><button class="btn ghost" type="button" data-go="trust" data-focus="reputationForm">Open</button></div></article>
           </div>
         </section>
 
         <section class="guide-section">
-          <h3>Complete walkthrough</h3>
-          <p>For a guided demo, follow these steps in order so each screen has the information needed by the next one.</p>
-          <div class="steps">
-            <article class="step"><span class="step-number">1</span><div><h3>Confirm the treasury connection</h3><p>Open Overview and select Sync DAO. Streamline reads the configured Sputnik contract and shows the role count, proposal bond, bounty count, and proposal count.</p><p>If this fails, confirm that the DAO ID and RPC URL are on the same NEAR network.</p></div></article>
-            <article class="step"><span class="step-number">2</span><div><h3>Unlock the operator session</h3><p>Open Build &amp; fund, paste the hosted <span class="mono">STREAMLINE_ADMIN_TOKEN</span>, and select Unlock. This authorizes administrative API requests only for the current browser tab; it is not a wallet private key.</p></div></article>
-            <article class="step"><span class="step-number">3</span><div><h3>Register a bounded program</h3><p>Choose a program ID and reference the DAO bounty ID. Enter the total available amount, expiration, payment network, and asset.</p><p>Allowed payees control who may receive funds. Allowed services control what type of agent work the budget may purchase. These restrictions are checked before signing.</p></div></article>
-            <article class="step"><span class="step-number">4</span><div><h3>Post and claim a task</h3><p>After the program appears in the selector, describe one concrete piece of work and post it. The task appears publicly in Overview.</p><p>Claim associates the work with a named NEAR account. In this prototype, the operator authorizes the claim; a production version would replace that step with wallet authentication.</p></div></article>
-            <article class="step"><span class="step-number">5</span><div><h3>Review the deliverable privately</h3><p>Open Privacy &amp; trust. Write explicit acceptance criteria, then paste the deliverable. Streamline first verifies fresh Intel TDX and NVIDIA GPU evidence, sends the work only after verification, and checks the signed response.</p><p>The dashboard returns a pass/fail decision, reasons, content hashes, and verification checks. Streamline does not store the plaintext criteria or deliverable.</p></div></article>
-            <article class="step"><span class="step-number">6</span><div><h3>Authorize settlement within policy</h3><p>A task capability can restrict the recipient, service route, per-call value, total value, number of calls, and expiration. A request outside those boundaries is rejected before a wallet signature is created.</p><p>Sputnik remains the approval and treasury layer; Streamline does not replace the DAO multisig.</p></div></article>
-            <article class="step"><span class="step-number">7</span><div><h3>Inspect receipt-backed reputation</h3><p>Use the reputation lookup with a named account. Reputation is derived from signed completion receipts, so a score can be traced to actual completed work rather than an unverified profile claim.</p></div></article>
-          </div>
+          <h3>Before you begin</h3>
+          <div class="quick-facts"><div class="quick-fact"><strong>Public</strong><span>Tasks, budget summaries, hashes, verification outcomes, and DAO state.</span></div><div class="quick-fact"><strong>Private</strong><span>Admin token, AI key, criteria, and deliverable plaintext.</span></div><div class="quick-fact"><strong>Prototype note</strong><span>Free-host restarts may clear in-memory demo programs; on-chain DAO data remains.</span></div></div>
         </section>
 
         <section class="guide-section">
-          <h3>What remains public and what stays private</h3>
-          <dl class="guide-facts">
-            <dt>Public</dt><dd>DAO account ID, tasks, budget totals, policy summaries, hashes, verification outcomes, receipts, and reputation evidence.</dd>
-            <dt>Private</dt><dd>Admin token, NEAR AI API key, wallet recovery material, acceptance criteria, and deliverable plaintext.</dd>
-            <dt>Never enter here</dt><dd>A Meteor recovery phrase or NEAR private key. Wallet approval should happen inside the wallet, not in this dashboard.</dd>
-            <dt>Free-host note</dt><dd>The current server keeps programs and tasks in memory. A free-host restart can clear demo records, while Sputnik DAO data remains on-chain.</dd>
-          </dl>
+          <h3>Quick glossary</h3>
+          <div class="glossary">
+            <details><summary>What is a bounded program?</summary><p>A spending policy that limits the total amount, expiration, approved recipients, and approved service types before a payment request can be signed.</p></details>
+            <details><summary>What does private review verify?</summary><p>It checks the submitted work against your criteria through an attested NEAR AI environment and returns a decision, reasons, hashes, and verification checks.</p></details>
+            <details><summary>Does Streamline replace Sputnik DAO?</summary><p>No. Sputnik remains the treasury and approval layer. Streamline organizes what the community does with that treasury.</p></details>
+          </div>
         </section>
-
-        <div class="guide-actions"><button class="btn" type="button" data-go="overview">Explore the overview</button><button class="btn secondary" type="button" data-go="build">Create a program</button><button class="btn ghost" type="button" data-go="trust">Try private review</button></div>
       </div>
     </section>
   </div>
@@ -217,9 +218,83 @@
       next.focus(); activateTab(next.dataset.tab);
     };
   });
-  document.querySelectorAll('[data-go]').forEach(button => button.onclick = () => activateTab(button.dataset.go));
+  function goTo(button) {
+    activateTab(button.dataset.go);
+    const target = button.dataset.focus && $(button.dataset.focus);
+    if (target) setTimeout(() => {
+      const focusable = target.matches('button,input,textarea,select') ? target : target.querySelector('button,input,textarea,select');
+      focusable?.focus({preventScroll:true});
+      target.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 120);
+  }
+  document.querySelectorAll('[data-go]').forEach(button => button.onclick = () => goTo(button));
   addEventListener('hashchange', () => activateTab(location.hash.slice(1), false));
   activateTab(location.hash.slice(1) || 'overview', false);
+
+  const useCases = {
+    bounty: {
+      title:'Fund a community bounty',
+      description:'Define one piece of work, cap its budget, verify the result privately, and return approval to the DAO.',
+      steps:[
+        ['Define the work','Post a concrete task with a clear outcome.','build','Build & fund'],
+        ['Set boundaries','Limit value, recipients, services, and time.','build','Build & fund'],
+        ['Verify privately','Check the deliverable without publishing its contents.','trust','Privacy & trust'],
+        ['Approve and track','Return the verified result to community oversight.','overview','Overview']
+      ]
+    },
+    rewards: {
+      title:'Reward trusted contributors',
+      description:'Turn completed community work into traceable recognition and future access.',
+      steps:[
+        ['Set the criteria','Describe what earns the reward before work begins.','build','Build & fund'],
+        ['Complete the task','Associate the work with a named contributor.','overview','Overview'],
+        ['Verify the result','Privately review evidence against the criteria.','trust','Privacy & trust'],
+        ['Build reputation','Trace recognition back to signed completion receipts.','trust','Privacy & trust']
+      ]
+    },
+    agents: {
+      title:'Give an agent a safe service budget',
+      description:'Let an agent coordinate paid work without giving it unlimited treasury access.',
+      steps:[
+        ['Define the service','Name the task and approved service route.','build','Build & fund'],
+        ['Cap the spend','Restrict recipient, total value, calls, and expiration.','build','Build & fund'],
+        ['Review the output','Verify the agent deliverable in an attested environment.','trust','Privacy & trust'],
+        ['Inspect the trail','Show tasks, remaining budget, and receipt evidence.','overview','Overview']
+      ]
+    },
+    microloan: {
+      title:'Coordinate a small community allocation',
+      description:'Use bounded programs and reputation evidence to prototype a transparent microloan workflow.',
+      steps:[
+        ['Create the pool','Register the amount available for small allocations.','build','Build & fund'],
+        ['Check eligibility','Use receipt-backed reputation as supporting evidence.','trust','Privacy & trust'],
+        ['Record the purpose','Post each allocation as accountable community work.','build','Build & fund'],
+        ['Community approval','Keep final authorization with Sputnik DAO.','overview','Overview']
+      ]
+    },
+    'mutual-aid': {
+      title:'Route accountable mutual aid',
+      description:'Organize support requests, protect sensitive details, and keep distribution visible to the community.',
+      steps:[
+        ['Open a program','Define the aid budget and approved recipients.','build','Build & fund'],
+        ['Protect details','Keep sensitive evidence inside private review.','trust','Privacy & trust'],
+        ['Verify the request','Return only the decision, reasons, and hashes.','trust','Privacy & trust'],
+        ['Track distribution','Show public totals without exposing private content.','overview','Overview']
+      ]
+    }
+  };
+  function renderFlow(caseId) {
+    const selected = useCases[caseId] || useCases.bounty;
+    $('flowTitle').textContent = selected.title;
+    $('flowDescription').textContent = selected.description;
+    $('flowMap').innerHTML = selected.steps.map((step,index) => `<button class="flow-step" type="button" data-flow-go="${esc(step[2])}"><span class="flow-number">0${index+1}</span><strong>${esc(step[0])}</strong><small>${esc(step[1])}</small><span class="flow-destination">Open ${esc(step[3])} →</span></button>`).join('');
+    document.querySelectorAll('[data-flow-go]').forEach(button => button.onclick = () => activateTab(button.dataset.flowGo));
+  }
+  document.querySelectorAll('.use-case').forEach(button => button.onclick = () => {
+    document.querySelectorAll('.use-case').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+    renderFlow(button.dataset.case);
+  });
+  renderFlow('bounty');
 
   function token(){ return sessionStorage.getItem('streamlineAdminToken') || ''; }
   const pause = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -261,7 +336,15 @@
     $('programCount').textContent=board.budgets.length; $('taskCount').textContent=board.tasks.length;
     $('remainingTotal').textContent=board.budgets.reduce((sum,b)=>sum+BigInt(b.remaining),0n).toString();
     $('taskProgram').innerHTML=board.budgets.length?board.budgets.map(b=>`<option value="${esc(b.programId)}">${esc(b.programId)} · ${esc(b.remaining)} left</option>`).join(''):'<option value="">Create a program first</option>';
+    updateGuideStatus();
     renderTasks();
+  }
+  function setCheck(id, label, ready) { const element=$(id); if(!element)return; element.textContent=label; element.classList.toggle('ready',ready); }
+  function updateGuideStatus() {
+    setCheck('checkDao',health?.daoId?'Connected':'Needs setup',Boolean(health?.daoId));
+    setCheck('checkToken',token()?'Unlocked':'Not unlocked',Boolean(token()));
+    setCheck('checkProgram',board?.budgets?.length?'Program ready':'Not started',Boolean(board?.budgets?.length));
+    setCheck('checkPrivacy',health?.privateReviewConfigured?'Configured':'Needs AI key',Boolean(health?.privateReviewConfigured));
   }
   async function refresh() {
     [health, board] = await Promise.all([api('/health'), api('/v1/board')]);
@@ -273,8 +356,8 @@
     document.querySelectorAll('.claim').forEach(button=>button.onclick=async()=>{const accountId=prompt('Named NEAR account to claim this task:');if(!accountId)return;try{await api(`/v1/tasks/${button.dataset.id}/claim`,{method:'POST',admin:true,body:JSON.stringify({accountId})});await refresh()}catch(e){alert(e.message)}});
   }
 
-  $('saveToken').onclick=()=>{sessionStorage.setItem('streamlineAdminToken',$('adminToken').value);$('adminToken').value='';$('statusText').textContent='Operator session unlocked'};
-  $('clearToken').onclick=()=>{sessionStorage.removeItem('streamlineAdminToken');$('statusText').textContent='Operator session cleared'};
+  $('saveToken').onclick=()=>{sessionStorage.setItem('streamlineAdminToken',$('adminToken').value);$('adminToken').value='';$('statusText').textContent='Operator session unlocked';updateGuideStatus()};
+  $('clearToken').onclick=()=>{sessionStorage.removeItem('streamlineAdminToken');$('statusText').textContent='Operator session cleared';updateGuideStatus()};
   $('programForm').onsubmit=withBusy($('programForm'),async data=>{if(!health.daoId)throw new Error('Set SPUTNIK_DAO_ID before registering a DAO-backed program');const body={version:1,id:data.get('id'),daoId:health.daoId,bountyId:Number(data.get('bountyId')),asset:data.get('asset'),network:data.get('network'),total:data.get('total'),expiresAt:Date.now()+Number(data.get('hours'))*3600000,allowedServices:split(data.get('services')),allowedPayees:split(data.get('payees'))};await api('/v1/programs',{method:'POST',admin:true,body:JSON.stringify(body)});output('createOutput','Program registered.');await refresh()});
   $('taskForm').onsubmit=withBusy($('taskForm'),async data=>{await api('/v1/tasks',{method:'POST',admin:true,body:JSON.stringify({programId:data.get('programId'),title:data.get('title')})});output('createOutput','Task posted.');await refresh()});
   $('reviewForm').onsubmit=withBusy($('reviewForm'),async data=>{const result=await api('/v1/private-review',{method:'POST',admin:true,body:JSON.stringify({criteria:data.get('criteria'),deliverable:data.get('deliverable')})});output('reviewOutput',{decision:result.decision,reasons:result.reasons,model:result.model,requestHash:result.requestHash,responseHash:result.responseHash,attestationVerified:result.attestation.verified,responseVerified:result.responseVerification.verified,checks:[...result.attestation.checks,...result.responseVerification.checks]})});

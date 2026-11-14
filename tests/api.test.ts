@@ -20,6 +20,10 @@ test('coordination API exposes an authenticated shared-budget workflow', async (
   const dashboard = await request(app).get('/');
   assert.equal(dashboard.status, 200);
   assert.match(dashboard.text, /<h1>Streamline<\/h1>/);
+  assert.match(dashboard.text, /What does your community want to do\?/);
+  assert.match(dashboard.text, /data-case="bounty"/);
+  assert.match(dashboard.text, /id="flowMap"/);
+  assert.match(dashboard.text, /Your demo checklist/);
   assert.match(dashboard.text, /window\.__STREAMLINE_BOOTSTRAP__=/);
   assert.match(dashboard.headers['cache-control'], /no-store/);
 
