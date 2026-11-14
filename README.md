@@ -1,4 +1,128 @@
-# Streamline: agents paying agents, per request
+# Streamline
+
+Streamline is coordination and payments infrastructure for community-owned work. It sits on top of a Sputnik DAO treasury and helps a community turn a decision into a bounded program, a public task, a private AI review, and receipt-backed reputation. Sputnik remains the approval and custody layer; Streamline organizes what the community does with it.
+
+The prototype combines four hackathon tracks:
+
+- **Social money:** shared programs, contributor tasks, and transparent budget state.
+- **Agent economy:** limited service budgets and policy-controlled agent payments.
+- **AI security and defense:** spending rules are checked before a wallet signature is created.
+- **Privacy:** deliverables can be reviewed through attested NEAR AI infrastructure without storing their plaintext in Streamline.
+
+## Run the coordination app
+
+Keep credentials in `.env`, which is ignored by Git. Never paste a Meteor recovery phrase or wallet private key into this project.
+
+```bash
+npm install
+npm run near:check       # confirm the Sputnik DAO connection
+npm run privacy:live     # confirm the NEAR AI private-review connection
+npm run coordination     # open http://localhost:4200
+```
+
+The hosted dashboard may take roughly a minute to wake on Render's free tier. The first page response includes a public server snapshot so the dashboard can still render while background refreshes recover.
+
+## Demo video runbook
+
+Use testnet values and fictional content throughout the demo. Create the program shortly before recording because the free hosted service stores prototype programs, tasks, and reputation events in memory; a service restart clears them.
+
+### 1. Prepare the demo
+
+1. Open Streamline and wait for **Coordination backend online**.
+2. On **Overview**, select **Community bounty**. Briefly click through its interactive flow: define work, set boundaries, verify privately, and approve or track.
+3. Select **Sync DAO**. Show that the treasury data comes from the configured Sputnik DAO.
+4. Open **How to use** and show the readiness checklist.
+5. Open **Build & fund**, enter `STREAMLINE_ADMIN_TOKEN`, and select **Unlock**. This token is an API admin credential, not a wallet key.
+
+### 2. Create a practice program
+
+Enter the following under **Build & fund → Create program and task**:
+
+| Field | Practice value |
+|---|---|
+| Program ID | `demo-research-bounty-01` |
+| Bounty ID | `0` |
+| Network | `monad-testnet` |
+| Asset | `tUSDC` |
+| Total base units | `50000` |
+| Expires in hours | `24` |
+| Allowed payees | `data-agent` |
+| Allowed services | `account-risk` |
+
+Select **Register program**. If the ID already exists in the current server session, increment the suffix to `-02` rather than reusing it.
+
+Suggested narration: “The community is not giving an agent open-ended treasury access. This program limits the asset, total amount, recipient, service, and expiration before any payment can be signed.”
+
+### 3. Post and claim a practice task
+
+1. Choose the practice program from the program selector.
+2. Use the task title: `Review a community wallet risk report`.
+3. Select **Post task**.
+4. Return to **Overview**. The task should appear as **open**.
+5. Select **Claim** and enter the fictional named account `demo-contributor.testnet`.
+6. The task should now appear as **claimed** with that contributor.
+
+Suggested narration: “The task and budget are public, while the sensitive work product can remain private. The named account will earn reputation only after a signed completion receipt—not merely for claiming the task.”
+
+### 4. Run a practice private TEE review
+
+Open **Privacy & trust** and copy these fictional inputs.
+
+**Acceptance criteria**
+
+```text
+Pass only if the deliverable identifies at least two wallet-risk signals, gives a low, medium, or high risk rating, recommends one follow-up action, and contains no private keys, recovery phrases, or personal data.
+```
+
+**Deliverable**
+
+```text
+Risk rating: medium. Signal one: the wallet is newly created and has little transaction history. Signal two: most activity is concentrated around a single counterparty. Recommended follow-up: request an additional independent transaction-history review before approving a larger payment. This report contains only fictional test data and no private credentials or personal information.
+```
+
+Select **Run verified review**. A successful demo should return:
+
+- a `pass` decision and short reasons;
+- `attestationVerified: true`;
+- `responseVerified: true`;
+- request and response hashes instead of stored plaintext.
+
+Suggested narration: “Streamline verifies the confidential-compute evidence before sending the work, then verifies the signed model response. The public record gets the verdict and hashes, not the private deliverable.”
+
+If the request fails, confirm that the NEAR AI key has credits and that `NEAR_AI_MODEL` uses the current canonical model name rather than an alias.
+
+### 5. Run a practice reputation lookup
+
+1. Under **Privacy & trust → Reputation lookup**, enter `demo-contributor.testnet`.
+2. Before a completion receipt is recorded, the expected result is score `0`, tier `new`, and an empty history.
+3. Explain that this is intentional: claiming a task or receiving an AI verdict alone cannot create reputation.
+
+Suggested narration: “Streamline does not award reputation from self-reported profiles. A contributor receives points only when a trusted coordinator issues a signed receipt for completed, passing work. The score can then be traced back to that receipt.”
+
+The current dashboard does not yet expose receipt issuance as a button. The API and automated tests cover the full reputation path: a passing completion gives 10 points, on-time delivery gives 3, and independent review gives 2, producing score `15` and tier `proven`. Do not claim that the browser lookup will change until a completion receipt has actually been posted.
+
+### 6. Finish the video
+
+Return to **Overview** and show:
+
+- the connected Sputnik treasury;
+- one registered program and its remaining budget;
+- the claimed practice task;
+- the interactive workflow connecting the product sections.
+
+Close with: “Streamline does not rebuild the multisig. It gives communities programmable budgets, private verification, controlled agent spending, and evidence-backed reputation on top of the treasury they already govern.”
+
+## Tests to run before recording
+
+```bash
+npm run near:check          # live DAO policy, bounty, and proposal read
+npm run privacy:live        # live attested private-review request
+npm run check               # typecheck, unit/API tests, and attack simulation
+```
+
+Expected automated result: 13 tests pass in the restricted development sandbox and one HTTP transport test is skipped because the sandbox cannot open a loopback listener. Outside that restriction, the API test exercises program creation, claiming, policy authorization, settlement, signed receipts, and a 15-point `proven` reputation result.
+
+## Agent payment rails
 
 Three AI-style agents pay each other per HTTP request using an [x402](https://x402.org)-style `402 Payment Required` flow with a test stablecoin. There are two implementations: **Monad** (EVM, live on testnet) and **Solana**.
 
@@ -9,7 +133,7 @@ orchestrator ──$0.02/call──▶ analyst-agent ──$0.005/call──▶ 
 
 The analyst is the interesting node. It earns from the orchestrator and spends on the data agent within the same request. It also returns the upstream payment transaction as **provenance**, and the orchestrator checks on-chain that the data agent really received $0.005 in that transaction.
 
-# Monad (live on testnet)
+## Monad payment rail (live on testnet)
 
 | | |
 |---|---|
@@ -21,13 +145,13 @@ The analyst is the interesting node. It earns from the orchestrator and spends o
 
 The full record is in [`deployments/monad-testnet.json`](deployments/monad-testnet.json). The agents' transaction histories on the explorer show every settled payment.
 
-## How a payment works on Monad (x402 "exact" scheme, EVM)
+### How a payment works on Monad (x402 "exact" scheme, EVM)
 
 1. The client calls `GET /risk/:address`. The server replies `402` with the price, token, `payTo`, the token's EIP-712 domain, and a single-use **seller-issued nonce**.
 2. The client checks its spend policy (token, per-call cap, total budget, payee allow-list). It then signs an **EIP-3009 `TransferWithAuthorization`** for exactly that price, using the seller's nonce, and retries with an `X-PAYMENT` header. **The buyer never needs MON.**
 3. The server verifies the authorization, burns the nonce, and **simulates** `transferWithAuthorization`. It then submits the call itself, paying gas, waits for the receipt, and serves the response with an `X-PAYMENT-RESPONSE` receipt.
 
-## Run it
+### Run it
 
 ```bash
 npm install
@@ -49,7 +173,7 @@ npm run monad:web                 # dashboard on :4100
 
 For mainnet, set `MONAD_NETWORK=monad` and run `monad:setup` with a funded treasury. To host anywhere, run `npm start` with `AGENT=data|analyst|web`, `PORT`, `<ROLE>_PRIVATE_KEY`, `DATA_AGENT_URL`, and `ANALYST_URL`.
 
-## Security model (Monad)
+### Security model (Monad)
 
 The seller submits the buyer's authorization and pays the gas, which makes it a target. `src/monad/x402.ts` and `src/monad/server.ts` reject:
 
@@ -67,21 +191,21 @@ The seller submits the buyer's authorization and pays the gas, which makes it a 
 
 The seller can't be drained through its own signature: it only ever calls `transferWithAuthorization` on one fixed token contract, so the buyer never chooses what the seller signs.
 
-## Economics on Monad
+### Economics on Monad
 
 Each settlement is one `transferWithAuthorization`. With the estimate +20% as the gas limit, that's about 118k gas, which at the testnet's ~102 gwei is about **0.012 MON per payment**. Monad charges the gas *limit*, not gas used, so the verifier keeps the limit tight. Whether $0.005 calls make sense on mainnet depends on the MON price and mainnet gas price: the fee share is `0.012 MON × price ÷ call price`. Below that break-even point you'd batch, using the same cumulative-IOU idea as the Solana Next steps below.
 
 Measured latency for a two-hop paid request (the orchestrator pays the analyst, and the analyst pays the data agent, each waiting for a receipt) was about 0.7–2s on testnet.
 
-# Solana version
+## Solana payment rail
 
-## The flow (x402 "exact" scheme)
+### The flow (x402 "exact" scheme)
 
 1. The client calls `GET /risk/:address`. The server replies `402` with the price, token mint, `payTo`, `feePayer`, and a single-use nonce.
 2. The client checks its **spend policy**: token, per-call cap, total budget, and payee allow-list. It then builds a `TransferChecked + Memo(nonce)` transaction, signs **only as token owner**, and retries with an `X-PAYMENT` header.
 3. The server verifies the transaction instruction by instruction and burns the nonce. It then co-signs as fee payer (so buyers need no SOL), submits, waits for `confirmed`, and serves the response with an `X-PAYMENT-RESPONSE` receipt.
 
-## Run it (local validator, about 2 minutes)
+### Run it (local validator, about 2 minutes)
 
 Install the Solana CLI (Agave): `sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"`, then:
 
@@ -123,7 +247,7 @@ tracked spend $0.0400 across 2 payments
 on-chain balance change $0.0400 ✓ matches
 ```
 
-## Layout
+### Layout
 
 | File | Role |
 |---|---|
@@ -138,7 +262,7 @@ on-chain balance change $0.0400 ✓ matches
 
 Each agent describes its offers at `GET /` (`curl localhost:4002/`).
 
-## Security model
+### Security model
 
 The seller signs as fee payer, which makes it a target. `src/x402/verify.ts` rejects:
 
@@ -155,7 +279,7 @@ The seller signs as fee payer, which makes it a target. `src/x402/verify.ts` rej
 
 The buyer side is defended too. `X402Client` checks the payee allow-list, per-call cap, and remaining budget **before signing**, and it reserves budget so concurrent calls can't overspend.
 
-## Economics
+### Economics
 
 Settlement costs the seller 10,000 lamports for the two signatures (payer + fee payer), plus a 1-lamport priority fee. At $150/SOL that is about **$0.0015 per payment**:
 
@@ -168,7 +292,7 @@ Settlement costs the seller 10,000 lamports for the two signatures (payer + fee 
 
 Per-call on-chain settlement stops making sense below about half a cent. Under that, you need batching (see Next steps).
 
-## Known limitations (deliberate, for clarity)
+### Known limitations (deliberate, for clarity)
 
 - **Pay-then-fail:** if the analyst's upstream call fails after the customer paid, it returns `502` and logs "refund owed". There is no automated refund yet.
 - **Latency:** each paid call waits for `confirmed`. Locally that is about 1s end to end for a two-hop request; it takes longer on devnet.
@@ -176,7 +300,7 @@ Per-call on-chain settlement stops making sense below about half a cent. Under t
 - **Not certified x402-compatible:** wire shapes follow x402 v1, but the facilitator logic is self-hosted. Swap in `@x402/*` or a hosted facilitator to interoperate with other agents.
 - **The risk score is a transparent toy heuristic, not a model.** Every point is traceable to a listed factor.
 
-## Next steps
+### Next steps
 
 - **Batched settlement:** sign cumulative IOUs off-chain, and settle every N calls or every $X.
 - **Refund path:** the seller refunds automatically when it can't deliver after settlement.
