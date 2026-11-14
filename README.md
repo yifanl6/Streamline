@@ -120,7 +120,7 @@ npm run privacy:live        # live attested private-review request
 npm run check               # typecheck, unit/API tests, and attack simulation
 ```
 
-Expected automated result: 13 tests pass in the restricted development sandbox and one HTTP transport test is skipped because the sandbox cannot open a loopback listener. Outside that restriction, the API test exercises program creation, claiming, policy authorization, settlement, signed receipts, and a 15-point `proven` reputation result.
+Expected automated result: 14 tests pass in the restricted development sandbox and one HTTP transport test is skipped because the sandbox cannot open a loopback listener. Outside that restriction, the API test exercises program creation, claiming, policy authorization, settlement, signed receipts, and a 15-point `proven` reputation result.
 
 ## Agent payment rails
 

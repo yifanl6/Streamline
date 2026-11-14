@@ -71,7 +71,7 @@ export class NearAiPrivateReviewer {
     });
     if (!reportResponse.ok) throw new PrivateReviewError(await responseError('attestation request', reportResponse));
     const report: unknown = await reportResponse.json();
-    const attestation = await this.verifier.verifyPreflight(report, nonce, this.model);
+    let attestation = await this.verifier.verifyPreflight(report, nonce, this.model);
     if (!attestation.verified) throw new PrivateReviewError('TEE preflight evidence did not verify');
 
     const requestBody = JSON.stringify({
@@ -113,8 +113,25 @@ export class NearAiPrivateReviewer {
     });
     if (!signatureResponse.ok) throw new PrivateReviewError(await responseError('response signature', signatureResponse));
     const signature: unknown = await signatureResponse.json();
-    const responseVerification = await this.verifier.verifyResponse({ signature, preflight: attestation, model: this.model, requestHash, responseHash });
-    if (!responseVerification.verified) throw new PrivateReviewError('TEE response signature did not verify');
+    let responseVerification = await this.verifier.verifyResponse({ signature, preflight: attestation, model: this.model, requestHash, responseHash });
+    const verificationDetail = responseVerification.checks.find((check) => !check.passed)?.detail;
+    if (!responseVerification.verified && verificationDetail?.includes('does not match verified')) {
+      // Model traffic can land on a TEE node that was not present in the first fleet report.
+      // Re-attest with the same fresh nonce and accept only if all cryptographic checks still pass.
+      const refreshedReportResponse = await this.fetcher(attestationUrl, {
+        headers: { accept: 'application/json', 'x-no-aliasing': 'true', authorization: `Bearer ${this.apiKey}` },
+      });
+      if (!refreshedReportResponse.ok) throw new PrivateReviewError(await responseError('refreshed attestation request', refreshedReportResponse));
+      const refreshedReport: unknown = await refreshedReportResponse.json();
+      const refreshedAttestation = await this.verifier.verifyPreflight(refreshedReport, nonce, this.model);
+      if (!refreshedAttestation.verified) throw new PrivateReviewError('refreshed TEE evidence did not verify');
+      attestation = refreshedAttestation;
+      responseVerification = await this.verifier.verifyResponse({ signature, preflight: attestation, model: this.model, requestHash, responseHash });
+    }
+    if (!responseVerification.verified) {
+      const detail = responseVerification.checks.find((check) => !check.passed)?.detail;
+      throw new PrivateReviewError(`TEE response signature did not verify${detail ? `: ${detail}` : ''}`);
+    }
 
     const content = completion.choices?.[0]?.message?.content;
     if (!content) throw new PrivateReviewError('completion has no review result');

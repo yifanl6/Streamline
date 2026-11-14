@@ -107,7 +107,13 @@ export class DcapNearAiEvidenceVerifier implements NearAiEvidenceVerifier {
       const matches = (input.preflight.verifiedSigners ?? []).filter(
         (signer) => signer.scope === scope && signer.algorithm === payload.signing_algo && signer.address.toLowerCase() === payload.signing_address!.toLowerCase(),
       );
-      if (matches.length !== 1) throw new Error('response signer does not uniquely match verified preflight evidence');
+      if (matches.length === 0) {
+        const verifiedForScope = (input.preflight.verifiedSigners ?? [])
+          .filter((signer) => signer.scope === scope && signer.algorithm === payload.signing_algo)
+          .map((signer) => signer.address)
+          .join(', ');
+        throw new Error(`response signer ${payload.signing_address} does not match verified ${scope} signer evidence${verifiedForScope ? ` (${verifiedForScope})` : ''}`);
+      }
       checks.push({ name: `${scope} signer bound to verified quote`, passed: true });
       return { verified: true, checks, signatureKind: payload.signature_kind, signer: payload.signing_address, signingAlgorithm: payload.signing_algo };
     } catch (error) {

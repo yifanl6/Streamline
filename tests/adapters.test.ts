@@ -76,6 +76,35 @@ test('private reviewer fails closed and never calls inference when attestation i
   assert.equal(calls, 1);
 });
 
+test('private reviewer refreshes verified fleet evidence when a completion lands on a new TEE signer', async () => {
+  let attestationCalls = 0;
+  const fetcher: typeof fetch = async (input) => {
+    const url = String(input);
+    if (url.includes('/attestation/report')) {
+      attestationCalls++;
+      return new Response(JSON.stringify({ generation: attestationCalls }));
+    }
+    if (url.includes('/chat/completions')) return new Response(JSON.stringify({ id: 'chat-new-node', choices: [{ message: { content: '{"decision":"pass","reasons":["verified"]}' } }] }));
+    if (url.includes('/signature/')) return new Response(JSON.stringify({ signature_kind: 'provider_tee', text: 'signed', signature: '0xabc' }));
+    throw new Error('unexpected URL');
+  };
+  const verifier: NearAiEvidenceVerifier = {
+    async verifyPreflight(report) {
+      const generation = (report as { generation: number }).generation;
+      return { verified: true, signer: generation === 1 ? 'old-node' : 'new-node', checks: [{ name: 'attestation', passed: true }] };
+    },
+    async verifyResponse({ preflight }) {
+      return preflight.signer === 'new-node'
+        ? { verified: true, checks: [{ name: 'response signature', passed: true }] }
+        : { verified: false, checks: [{ name: 'response verification policy', passed: false, detail: 'response signer does not match verified model signer evidence' }] };
+    },
+  };
+  const result = await new NearAiPrivateReviewer('secret', verifier, 'model-id', 'https://cloud.example/v1', fetcher).review('criteria', 'deliverable');
+  assert.equal(result.responseVerification.verified, true);
+  assert.equal(result.attestation.signer, 'new-node');
+  assert.equal(attestationCalls, 2);
+});
+
 test('DCAP verifier binds quote measurements, nonce, GPU verdict, and exact signed response hashes', async () => {
   const account = privateKeyToAccount(`0x${'11'.repeat(32)}`);
   const nonce = 'ab'.repeat(32);
@@ -97,7 +126,11 @@ test('DCAP verifier binds quote measurements, nonce, GPU verdict, and exact sign
   };
   const preflight = await verifier.verifyPreflight({
     gateway_attestation: base,
-    model_attestations: [{ ...base, nvidia_payload: JSON.stringify({ nonce }) }],
+    model_attestations: [
+      { ...base, nvidia_payload: JSON.stringify({ nonce }) },
+      { ...base, nvidia_payload: JSON.stringify({ nonce }) },
+      { ...base, nvidia_payload: JSON.stringify({ nonce }) },
+    ],
   }, nonce, 'model-id');
   assert.equal(preflight.verified, true);
   assert.equal(preflight.checks.every((check) => check.passed), true);
