@@ -9,24 +9,24 @@
     :root {
       --bg:#f7f5f0; --panel:#ffffff; --panel2:#edf1f5; --ink:#0d1726; --muted:#3f4b59;
       --line:#c8ced6; --green:#1f3a5f; --cyan:#245ea6; --amber:#8a5a00; --red:#a61b12;
-      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif; --serif:Georgia,'Times New Roman',Times,serif;
+      --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; --sans:Inter,'SF Pro Text','Segoe UI',Roboto,Helvetica,Arial,sans-serif;
     }
     *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--sans)}
     button,input,textarea,select{font:inherit} button{cursor:pointer}.mono{font-family:var(--mono)}
     header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
     .bar,.shell{max-width:1440px;margin:auto;padding:0 22px}.bar{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:12px;font:700 18px var(--serif);letter-spacing:.01em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font:12px var(--mono)}
+    .brand{display:flex;align-items:center;gap:12px;font:700 15px var(--sans);letter-spacing:.02em}.logo{width:30px;height:30px;border:1px solid var(--green);display:grid;place-items:center;color:var(--green);font:12px var(--mono)}
     .status{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}.dot.ok{background:#16835c}
     .shell{padding-top:28px;padding-bottom:70px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start}.workspace{min-width:0}.hero{display:block;max-width:780px;margin-bottom:34px}
     .sidebar{position:sticky;top:96px}.side-kicker{font:10px var(--mono);color:var(--green);letter-spacing:.12em;text-transform:uppercase;margin:0 0 10px 12px}.side-nav{display:grid;gap:3px}.nav-tab{width:100%;display:grid;grid-template-columns:28px 1fr;align-items:center;gap:8px;text-align:left;border:0;border-left:2px solid transparent;background:transparent;color:var(--muted);padding:11px 12px}.nav-tab:hover{background:var(--panel);color:var(--ink)}.nav-tab[aria-selected="true"]{background:var(--panel2);border-left-color:var(--green);color:var(--ink)}.nav-index{font:10px var(--mono);color:var(--green)}.nav-copy strong{display:block;font-size:13px}.nav-copy small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.side-note{border-top:1px solid var(--line);margin-top:18px;padding:16px 12px 0;color:var(--muted);font-size:11px}.side-note strong{display:block;color:var(--ink);margin-bottom:5px}
-    h1,h2,h3{font-family:var(--serif)}h1{font-size:clamp(42px,6vw,68px);font-weight:600;line-height:1;letter-spacing:-.035em;margin:0;max-width:800px}.hero p{margin:14px 0 0;color:var(--muted);font-size:17px;max-width:720px}
+    h1,h2,h3{font-family:var(--sans)}h1{font-size:clamp(40px,5.5vw,62px);font-weight:650;line-height:1.04;letter-spacing:-.04em;margin:0;max-width:800px}.hero p{margin:14px 0 0;color:var(--muted);font-size:16px;max-width:720px}
     .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:34px 28px}.panel{background:transparent;border:0;min-width:0}
-    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 12px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px;padding:0 0 12px;border-bottom:1px solid var(--line)}.panel-head h2{font-size:18px;font-weight:650;letter-spacing:-.015em;margin:0}.eyebrow{font:11px var(--mono);color:var(--green)}
     .content{padding:18px 0 8px}.summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.metric{padding:20px 18px;border-right:1px solid var(--line)}.metric:first-child{padding-left:0}.metric:last-child{border:0}.metric .label{color:var(--muted);font-size:12px}.metric .value{font:25px var(--mono);margin-top:5px}.metric .detail{color:var(--muted);font-size:11px;margin-top:4px;overflow:hidden;text-overflow:ellipsis}
     .board{grid-column:span 7}.setup{grid-column:span 4}.create{grid-column:span 8}.privacy{grid-column:span 7}.reputation{grid-column:span 5}.dao{grid-column:span 5}.guide{grid-column:span 12}.tab-hidden{display:none!important}
     .task{display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border:0}.task-title{font-weight:650}.task-meta{color:var(--muted);font:11px var(--mono);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid currentColor;padding:3px 7px;font:10px var(--mono);text-transform:uppercase;color:var(--cyan)}.badge.open{color:var(--green)}.badge.completed{color:var(--cyan)}
     label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}.field{margin-bottom:14px}input,textarea,select{width:100%;border:1px solid #aeb8c5;background:var(--panel);color:var(--ink);padding:11px 12px;outline:none}textarea{min-height:112px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(23,58,99,.12)}
-    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#fff;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:#9da8b5}.btn:disabled{opacity:.5;cursor:wait}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--green);background:var(--green);color:#fff;padding:9px 13px;font-weight:700}.btn.secondary{background:transparent;color:var(--green)}.btn.ghost{background:transparent;color:var(--muted);border-color:#9da8b5}.btn:disabled{opacity:.5;cursor:wait}::placeholder{color:#8a96a5;opacity:1}
     .helper,.section-desc{color:var(--muted);font-size:13px;margin:0 0 18px;max-width:720px}.section-desc{font-size:14px;max-width:640px}
     .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:12px}.kv dt{color:var(--muted)}.kv dd{margin:0;min-width:0;overflow-wrap:anywhere;font-family:var(--mono)}
     .empty{color:var(--muted);padding:16px 0}.error{color:var(--red)}.success{color:#067647}.output{margin-top:13px;padding:14px;background:var(--panel2);border-left:3px solid var(--green);font:12px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto}
@@ -43,9 +43,9 @@
     <p class="side-kicker">Workspace</p>
     <nav class="side-nav" role="tablist" aria-orientation="vertical">
       <button class="nav-tab" type="button" role="tab" aria-selected="true" aria-controls="view-overview" data-tab="overview"><span class="nav-index">01</span><span class="nav-copy"><strong>Overview</strong><small>Tasks, budgets &amp; DAO</small></span></button>
-      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-build" data-tab="build"><span class="nav-index">02</span><span class="nav-copy"><strong>Build &amp; fund</strong><small>Create coordinated work</small></span></button>
-      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-trust" data-tab="trust"><span class="nav-index">03</span><span class="nav-copy"><strong>Privacy &amp; trust</strong><small>TEE review &amp; reputation</small></span></button>
-      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-guide" data-tab="guide"><span class="nav-index">04</span><span class="nav-copy"><strong>How to use</strong><small>Roles and demo walkthrough</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-guide" data-tab="guide"><span class="nav-index">02</span><span class="nav-copy"><strong>How to use</strong><small>Roles and demo walkthrough</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-build" data-tab="build"><span class="nav-index">03</span><span class="nav-copy"><strong>Build &amp; fund</strong><small>Create coordinated work</small></span></button>
+      <button class="nav-tab" type="button" role="tab" aria-selected="false" aria-controls="view-trust" data-tab="trust"><span class="nav-index">04</span><span class="nav-copy"><strong>Privacy &amp; trust</strong><small>TEE review &amp; reputation</small></span></button>
     </nav>
     <div class="side-note"><strong>Hosted demo</strong>Anyone can inspect public coordination data. Actions that change state require the operator session.</div>
   </aside>
@@ -81,18 +81,18 @@
     <section class="panel create tab-hidden" data-view="build">
       <div class="panel-head"><h2>Create program and task</h2><span class="eyebrow">Admin</span></div>
       <div class="content">
-        <form id="programForm">
-          <div class="row"><div class="field"><label>Program ID</label><input name="id" value="community-research"></div><div class="field"><label>Bounty ID</label><input name="bountyId" type="number" min="0" value="0"></div></div>
-          <div class="row"><div class="field"><label>Network</label><input name="network" value="monad-testnet"></div><div class="field"><label>Asset</label><input name="asset" value="tUSDC"></div></div>
-          <div class="row"><div class="field"><label>Total base units</label><input name="total" inputmode="numeric" value="50000"></div><div class="field"><label>Expires in hours</label><input name="hours" type="number" min="1" value="24"></div></div>
-          <div class="field"><label>Allowed payees, comma separated</label><input name="payees" value="data-agent"></div>
-          <div class="field"><label>Allowed services, comma separated</label><input name="services" value="account-risk"></div>
+        <form id="programForm" autocomplete="off">
+          <div class="row"><div class="field"><label>Program ID</label><input name="id" autocomplete="off" placeholder="e.g. community-research"></div><div class="field"><label>Bounty ID</label><input name="bountyId" type="number" min="0" autocomplete="off" placeholder="e.g. 0"></div></div>
+          <div class="row"><div class="field"><label>Network</label><input name="network" autocomplete="off" placeholder="e.g. monad-testnet"></div><div class="field"><label>Asset</label><input name="asset" autocomplete="off" placeholder="e.g. tUSDC"></div></div>
+          <div class="row"><div class="field"><label>Total base units</label><input name="total" inputmode="numeric" autocomplete="off" placeholder="e.g. 50000"></div><div class="field"><label>Expires in hours</label><input name="hours" type="number" min="1" autocomplete="off" placeholder="e.g. 24"></div></div>
+          <div class="field"><label>Allowed payees, comma separated</label><input name="payees" autocomplete="off" placeholder="e.g. data-agent"></div>
+          <div class="field"><label>Allowed services, comma separated</label><input name="services" autocomplete="off" placeholder="e.g. account-risk"></div>
           <button class="btn" type="submit">Register program</button>
         </form>
         <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
-        <form id="taskForm">
+        <form id="taskForm" autocomplete="off">
           <div class="field"><label>Program</label><select id="taskProgram" name="programId"><option value="">Create a program first</option></select></div>
-          <div class="field"><label>Task title</label><input name="title" value="Review a wallet risk report"></div>
+          <div class="field"><label>Task title</label><input name="title" autocomplete="off" placeholder="e.g. Review a wallet risk report"></div>
           <button class="btn secondary" type="submit">Post task</button>
         </form>
         <div id="createOutput"></div>
@@ -103,8 +103,8 @@
       <div class="panel-head"><h2>Private TEE review</h2><span class="eyebrow">NEAR AI Cloud</span></div>
       <div class="content">
         <p class="helper">Only hashes, the verdict, and verification checks are returned. Criteria and deliverable text are not persisted by Streamline.</p>
-        <form id="reviewForm">
-          <div class="field"><label>Acceptance criteria</label><textarea name="criteria">Confirm the deliverable answers the task, cites its sources, and contains no personal data.</textarea></div>
+        <form id="reviewForm" autocomplete="off">
+          <div class="field"><label>Acceptance criteria</label><textarea name="criteria" autocomplete="off" placeholder="e.g. Confirm the deliverable answers the task, cites its sources, and contains no personal data."></textarea></div>
           <div class="field"><label>Deliverable</label><textarea name="deliverable" placeholder="Paste fictional or sensitive work for private review…"></textarea></div>
           <button class="btn" type="submit">Run verified review</button>
         </form>
@@ -115,7 +115,7 @@
     <section class="panel reputation tab-hidden" data-view="trust">
       <div class="panel-head"><h2>Reputation lookup</h2><span class="eyebrow">Receipt-backed</span></div>
       <div class="content">
-        <form id="reputationForm"><div class="field"><label>Named NEAR account</label><input name="accountId" value="alice.testnet"></div><button class="btn secondary">Look up</button></form>
+        <form id="reputationForm" autocomplete="off"><div class="field"><label>Named NEAR account</label><input name="accountId" autocomplete="off" placeholder="e.g. alice.near"></div><button class="btn secondary">Look up</button></form>
         <div id="reputationOutput" class="empty">Enter an account to inspect its traceable history.</div>
       </div>
     </section>
@@ -189,8 +189,9 @@
   const $ = (id) => document.getElementById(id);
   const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
   const split = (value) => value.split(',').map(v => v.trim()).filter(Boolean);
-  let health = null;
-  let board = { tasks: [], budgets: [] };
+  const bootstrap = window.__STREAMLINE_BOOTSTRAP__;
+  let health = bootstrap?.health ?? null;
+  let board = bootstrap?.board ?? { tasks: [], budgets: [] };
 
   const tabs = [...document.querySelectorAll('.nav-tab')];
   const views = [...document.querySelectorAll('[data-view]')];
@@ -252,8 +253,7 @@
   function output(id, value, kind='success') { $(id).innerHTML = `<div class="output ${kind}">${esc(typeof value === 'string' ? value : JSON.stringify(value,null,2))}</div>`; }
   function withBusy(form, fn) { return async (event) => { event.preventDefault(); const button=form.querySelector('button[type=submit]'); button.disabled=true; try{await fn(new FormData(form));}catch(e){output(form.id==='reviewForm'?'reviewOutput':form.id==='reputationForm'?'reputationOutput':'createOutput',e.message,'error')}finally{button.disabled=false} }; }
 
-  async function refresh() {
-    [health, board] = await Promise.all([api('/health'), api('/v1/board')]);
+  function renderState() {
     $('statusDot').classList.add('ok'); $('statusText').textContent='Coordination backend online';
     $('apiState').textContent='connected'; $('coordinatorKey').textContent=health.coordinatorPublicKey;
     $('privateState').textContent=health.privateReviewConfigured?'configured':'API key not configured';
@@ -263,10 +263,14 @@
     $('taskProgram').innerHTML=board.budgets.length?board.budgets.map(b=>`<option value="${esc(b.programId)}">${esc(b.programId)} · ${esc(b.remaining)} left</option>`).join(''):'<option value="">Create a program first</option>';
     renderTasks();
   }
+  async function refresh() {
+    [health, board] = await Promise.all([api('/health'), api('/v1/board')]);
+    renderState();
+  }
   function renderTasks(){
     if(!board.tasks.length){$('tasks').innerHTML='<div class="empty">No tasks yet. Register a program and post the first task.</div>';return}
     $('tasks').innerHTML=board.tasks.map(t=>`<article class="task"><div><div class="task-title">${esc(t.title)}</div><div class="task-meta">${esc(t.id)} · ${esc(t.programId)}${t.contributor?` · ${esc(t.contributor)}`:''}</div></div><div><span class="badge ${esc(t.status)}">${esc(t.status)}</span>${t.status==='open'?`<button class="btn ghost claim" data-id="${esc(t.id)}" style="margin-left:8px">Claim</button>`:''}</div></article>`).join('');
-    document.querySelectorAll('.claim').forEach(button=>button.onclick=async()=>{const accountId=prompt('Named NEAR account to claim this task:','alice.testnet');if(!accountId)return;try{await api(`/v1/tasks/${button.dataset.id}/claim`,{method:'POST',admin:true,body:JSON.stringify({accountId})});await refresh()}catch(e){alert(e.message)}});
+    document.querySelectorAll('.claim').forEach(button=>button.onclick=async()=>{const accountId=prompt('Named NEAR account to claim this task:');if(!accountId)return;try{await api(`/v1/tasks/${button.dataset.id}/claim`,{method:'POST',admin:true,body:JSON.stringify({accountId})});await refresh()}catch(e){alert(e.message)}});
   }
 
   $('saveToken').onclick=()=>{sessionStorage.setItem('streamlineAdminToken',$('adminToken').value);$('adminToken').value='';$('statusText').textContent='Operator session unlocked'};
@@ -286,7 +290,12 @@
       refresh().catch(showConnectionError);
     };
   }
-  refresh().catch(showConnectionError);
+  if (health && Array.isArray(board.tasks) && Array.isArray(board.budgets)) {
+    renderState();
+    refresh().catch(() => { $('statusText').textContent = 'Showing the latest server snapshot'; });
+  } else {
+    refresh().catch(showConnectionError);
+  }
 </script>
 </body>
 </html>

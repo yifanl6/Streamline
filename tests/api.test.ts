@@ -19,7 +19,9 @@ test('coordination API exposes an authenticated shared-budget workflow', async (
   assert.equal(unauthorized.status, 401);
   const dashboard = await request(app).get('/');
   assert.equal(dashboard.status, 200);
-  assert.match(dashboard.text, /Coordinate value\. Prove the work\./);
+  assert.match(dashboard.text, /<h1>Streamline<\/h1>/);
+  assert.match(dashboard.text, /window\.__STREAMLINE_BOOTSTRAP__=/);
+  assert.match(dashboard.headers['cache-control'], /no-store/);
 
   const program = {
     version: 1, id: 'p1', daoId: 'dao.sputnik-dao.testnet', bountyId: 1, asset: 'USDC', network: 'monad-testnet',

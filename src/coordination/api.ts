@@ -1,4 +1,5 @@
 import crypto, { type KeyObject } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import express, { type NextFunction, type Request, type Response } from 'express';
 import { TaskBudget } from './budget';
@@ -50,6 +51,18 @@ export function createCoordinationApp(options: ApiOptions) {
   const reputation = new ReputationLedger(trustedCoordinator);
   const dao = options.daoId ? new SputnikClient(options.daoId, options.nearRpcUrl) : null;
   const dashboardPath = path.resolve('src/coordination/dashboard.html');
+  const dashboardTemplate = readFileSync(dashboardPath, 'utf8');
+  const healthSnapshot = () => ({
+    ok: true,
+    service: 'streamline-coordination',
+    coordinatorPublicKey,
+    daoId: options.daoId ?? null,
+    privateReviewConfigured: Boolean(options.privateReviewer),
+  });
+  const boardSnapshot = () => ({
+    tasks: [...tasks.values()],
+    budgets: [...budgets.values()].map((budget) => budget.snapshot()),
+  });
 
   const app = express();
   app.disable('x-powered-by');
@@ -59,21 +72,13 @@ export function createCoordinationApp(options: ApiOptions) {
   });
   app.use(express.json({ limit: '256kb' }));
 
-  app.get('/', (_req, res) => res.sendFile(dashboardPath));
-  app.get('/health', (_req, res) => res.json({
-    ok: true,
-    service: 'streamline-coordination',
-    coordinatorPublicKey,
-    daoId: options.daoId ?? null,
-    privateReviewConfigured: Boolean(options.privateReviewer),
-  }));
-
-  app.get('/v1/board', (_req, res) => {
-    res.json({
-      tasks: [...tasks.values()],
-      budgets: [...budgets.values()].map((budget) => budget.snapshot()),
-    });
+  app.get('/', (_req, res) => {
+    const bootstrap = JSON.stringify({ health: healthSnapshot(), board: boardSnapshot() }).replace(/</g, '\\u003c');
+    res.type('html').send(dashboardTemplate.replace('</head>', `<script>window.__STREAMLINE_BOOTSTRAP__=${bootstrap}</script></head>`));
   });
+  app.get('/health', (_req, res) => res.json(healthSnapshot()));
+
+  app.get('/v1/board', (_req, res) => res.json(boardSnapshot()));
 
   app.post('/v1/programs', requireAdmin(options.adminToken), (req, res) => {
     const program = req.body as ProgramBudget;
